@@ -33,6 +33,11 @@
 	});
 <!-- Fetching post text -->	
 $(document).ready(function($){
+  let flag1 = false
+  let flag2 = false
+  let flag3 = false
+
+
 	$('#form1').on('submit',function(event){
 		event.preventDefault();
 		$.ajax({
@@ -102,6 +107,44 @@ $('.delete-item').click(function(){
   },200);
   setTimeout(function(){ $(parentItem).remove(); }, 1000);
 });
+
+// checklist logic
+
+$('#task1').click(function(){
+  flag1 = true
+  console.log('hi')
+})
+
+$('#task2').click(function(event){
+  if (!flag1) {
+    event.preventDefault();
+    event.stopPropagation();
+    alert('check first item')
+  } else {
+    flag2 = true
+  }
+})
+
+$('#task3').click(function(event){
+  if (!flag1 || !flag2) {
+    event.preventDefault();
+    event.stopPropagation();
+    alert('check other items')
+  } else {
+    flag3 = true
+  }
+})
+
+$('#task4').click(function(){
+  if (!flag1 || !flag2 || !flag3) {
+    event.preventDefault();
+    event.stopPropagation();
+    alert('check other items')
+  } else {
+    flag3 = true
+  }
+})
+
 
 // Enter Key detect
 
@@ -261,7 +304,6 @@ left:-25px;
 -webkit-box-shadow:inset 0 0 0 2px #949494;
    -moz-box-shadow:inset 0 0 0 2px #949494;
         box-shadow:inset 0 0 0 2px #949494;
-cursor: hover;
 }
 
 .todo .fa-check{
@@ -385,7 +427,7 @@ width:100%;
 <form id="todo-list">
   <span class="todo-wrap">
     <input type="checkbox" id="1" />
-    <label for="1" class="todo">
+    <label for="1" class="todo" id="task1">
       <i class="fa fa-check"></i>
       check capitalization 
     </label>
@@ -395,7 +437,7 @@ width:100%;
   </span>
   <span class="todo-wrap">
     <input type="checkbox" id="2"/>
-    <label for="2" class="todo">
+    <label for="2" class="todo" id="task2">
       <i class="fa fa-check"></i>
       check links
     </label>
@@ -405,7 +447,7 @@ width:100%;
   </span>
   <span class="todo-wrap">
     <input type="checkbox" id="3"/>
-    <label for="3" class="todo">
+    <label for="3" class="todo" id="task3">
       <i class="fa fa-check"></i>
       check mobile and tablet versions
     </label>
@@ -414,8 +456,8 @@ width:100%;
     </span>
   </span>
 	<span class="todo-wrap">
-    <input type="checkbox" id="4"/>
-    <label for="4" class="todo">
+    <input type="checkbox" id="4" />
+    <label for="4" class="todo" id="task4">
       <i class="fa fa-check"></i>
        check everything else all together
     </label>
