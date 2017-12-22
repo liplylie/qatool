@@ -8,43 +8,49 @@
 
 <!-- Initialize TinyMCE -->
  tinyMCE.init({
-		 mode : "textareas",
-		 plugins : "AtD,paste",
-		 paste_text_sticky : true,
-		 setup : function(ed) {
-			 ed.onInit.add(function(ed) {
-				 ed.pasteAsPlainText = true;
-			 });
-		 },
-		 languagetool_i18n_current_lang : function() { return document.checkform.lang.value; },
-		 languagetool_rpc_url : "https://languagetool.org/api/v2/check",
-		 languagetool_css_url :
-			 "https://www.languagetool.org/online-check/" +
-			 "tiny_mce/plugins/atd-tinymce/css/content.css",
-		 theme                              : "advanced",
-		 theme_advanced_buttons1            : "",
-		 theme_advanced_buttons2            : "",
-		 theme_advanced_buttons3            : "",
-		 theme_advanced_toolbar_location    : "none",
-		 theme_advanced_toolbar_align       : "left",
-		 theme_advanced_statusbar_location  : "bottom",
-		 theme_advanced_path                : false,
-		 theme_advanced_resizing            : true,
-		 theme_advanced_resizing_use_cookie : false,
-		 gecko_spellcheck                   : false
+   mode : "textareas",
+   plugins : "AtD,paste",
+   paste_text_sticky : true,
+   setup : function(ed) {
+  	 ed.onInit.add(function(ed) {
+  		 ed.pasteAsPlainText = true;
+  	 });
+   },
+   languagetool_i18n_current_lang : function() { return document.checkform.lang.value; },
+   languagetool_rpc_url : "https://languagetool.org/api/v2/check",
+   languagetool_css_url :
+  	 "https://www.languagetool.org/online-check/" +
+  	 "tiny_mce/plugins/atd-tinymce/css/content.css",
+   theme                              : "advanced",
+   theme_advanced_buttons1            : "",
+   theme_advanced_buttons2            : "",
+   theme_advanced_buttons3            : "",
+   theme_advanced_toolbar_location    : "none",
+   theme_advanced_toolbar_align       : "left",
+   theme_advanced_statusbar_location  : "bottom",
+   theme_advanced_path                : false,
+   theme_advanced_resizing            : true,
+   theme_advanced_resizing_use_cookie : false,
+  	 gecko_spellcheck                   : false
 	});
 <!-- Fetching post text -->	
 $(document).ready(function($){
+  // flags are for checklist logic
   let flag1 = false
   let flag2 = false
   let flag3 = false
   let flag4 = false
 
+  //ask to check for either url or email
   $("#urlOrEmail input[name='type']").click(function(){
     if($('input:radio[name=type]:checked').val() == "url"){
       $('#step1').show();
+      $('#checkEmail').hide();
+      //$('#urlOrEmail').hide();
     } else {
       $('#checkEmail').show();
+      $('#step1').hide();
+      //$('#urlOrEmail').hide();
     }
   })
 
@@ -52,120 +58,120 @@ $(document).ready(function($){
 		event.preventDefault();
  
 		$.ajax({
-		    url: 'fetch.php?url=' + $('input[name=url]').val(),
+		    url: 'https://provensolutions.tech/js/804041/qa/fetch.php?' + $('input[name=url]').val(),
 		    type: 'GET',
 		    success: function(res) {
+          console.log(res, 'res')
 			  $('#step1').hide();
 			  $('#step2').show();
-			  $(tinymce.get('checktext').getBody()).html( res );
+			  $(tinymce.get('checktext1').getBody()).html( res );
 			 },
        error: function(err) {
         console.log(err)
-        alert(JSON.stringify(err))
        }
 		});
 	});
-
-	// add items
-$('#add-todo').click(function(){
-  var lastSibling = $('#todo-list > .todo-wrap:last-of-type > input').attr('id');
-  var newId = Number(lastSibling) + 1;
-      
-  $(this).before('<span class="editing todo-wrap"><input type="checkbox" id="'+newId+'"/><label for="'+newId+'" class="todo"><i class="fa fa-check"></i><input type="text" class="input-todo" id="input-todo'+newId+'"/></label></div>');
-  $('#input-todo'+newId+'').parent().parent().animate({
-    height:"36px"
-  },200)
-  $('#input-todo'+newId+'').focus();
-  
-	$('#input-todo'+newId+'').enterKey(function(){
-    $(this).trigger('enterEvent');
-  })
-  
-  $('#input-todo'+newId+'').on('blur enterEvent',function(){
-    var todoTitle = $('#input-todo'+newId+'').val();
-    var todoTitleLength = todoTitle.length;
-    if (todoTitleLength > 0) {
-      $(this).before(todoTitle);
-      $(this).parent().parent().removeClass('editing');
-      $(this).parent().after('<span class="delete-item" title="remove"><i class="fa fa-times-circle"></i></span>');
-      $(this).remove();
-      $('.delete-item').click(function(){
-        var parentItem = $(this).parent();
-        parentItem.animate({
-          left:"-30%",
-          height:0,
-          opacity:0
+  // check list 
+  	// add items
+  $('#add-todo').click(function(){
+    var lastSibling = $('#todo-list > .todo-wrap:last-of-type > input').attr('id');
+    var newId = Number(lastSibling) + 1;
+        
+    $(this).before('<span class="editing todo-wrap"><input type="checkbox" id="'+newId+'"/><label for="'+newId+'" class="todo"><i class="fa fa-check"></i><input type="text" class="input-todo" id="input-todo'+newId+'"/></label></div>');
+    $('#input-todo'+newId+'').parent().parent().animate({
+      height:"36px"
+    },200)
+    $('#input-todo'+newId+'').focus();
+    
+  	$('#input-todo'+newId+'').enterKey(function(){
+      $(this).trigger('enterEvent');
+    })
+    
+    $('#input-todo'+newId+'').on('blur enterEvent',function(){
+      var todoTitle = $('#input-todo'+newId+'').val();
+      var todoTitleLength = todoTitle.length;
+      if (todoTitleLength > 0) {
+        $(this).before(todoTitle);
+        $(this).parent().parent().removeClass('editing');
+        $(this).parent().after('<span class="delete-item" title="remove"><i class="fa fa-times-circle"></i></span>');
+        $(this).remove();
+        $('.delete-item').click(function(){
+          var parentItem = $(this).parent();
+          parentItem.animate({
+            left:"-30%",
+            height:0,
+            opacity:0
+          },200);
+          setTimeout(function(){ $(parentItem).remove(); }, 1000);
+        });
+      }
+      else {
+        $('.editing').animate({
+          height:'0px'
         },200);
-        setTimeout(function(){ $(parentItem).remove(); }, 1000);
-      });
-    }
-    else {
-      $('.editing').animate({
-        height:'0px'
-      },200);
-      setTimeout(function(){
-        $('.editing').remove()
-      },400)
+        setTimeout(function(){
+          $('.editing').remove()
+        },400)
+      }
+    })
+
+  });
+
+  // remove items 
+
+  $('.delete-item').click(function(){
+    var parentItem = $(this).parent();
+    parentItem.animate({
+      left:"-30%",
+      height:0,
+      opacity:0
+    },200);
+    setTimeout(function(){ $(parentItem).remove(); }, 1000);
+  });
+
+  // checklist logic
+
+  $('#task1').click(function(){
+    flag1 = true
+  })
+
+  $('#task2').click(function(event){
+    if (!flag1) {
+      event.preventDefault();
+      event.stopPropagation();
+      alert('check first item')
+    } else {
+      flag2 = true
     }
   })
 
-});
+  $('#task3').click(function(event){
+    if (!flag1 || !flag2) {
+      event.preventDefault();
+      event.stopPropagation();
+      alert('check other items')
+    } else {
+      flag3 = true
+    }
+  })
 
-// remove items 
+  $('#task4').click(function(){
+    if (!flag1 || !flag2 || !flag3) {
+      event.preventDefault();
+      event.stopPropagation();
+      alert('check other items')
+    } else {
+      flag4 = true
+    }
+  })
 
-$('.delete-item').click(function(){
-  var parentItem = $(this).parent();
-  parentItem.animate({
-    left:"-30%",
-    height:0,
-    opacity:0
-  },200);
-  setTimeout(function(){ $(parentItem).remove(); }, 1000);
-});
-
-// checklist logic
-
-$('#task1').click(function(){
-  flag1 = true
-})
-
-$('#task2').click(function(event){
-  if (!flag1) {
-    event.preventDefault();
-    event.stopPropagation();
-    alert('check first item')
-  } else {
-    flag2 = true
-  }
-})
-
-$('#task3').click(function(event){
-  if (!flag1 || !flag2) {
-    event.preventDefault();
-    event.stopPropagation();
-    alert('check other items')
-  } else {
-    flag3 = true
-  }
-})
-
-$('#task4').click(function(){
-  if (!flag1 || !flag2 || !flag3) {
-    event.preventDefault();
-    event.stopPropagation();
-    alert('check other items')
-  } else {
-    flag4 = true
-  }
-})
-
-$('#task5').click(function(){
-  if (!flag1 || !flag2 || !flag3 || !flag4) {
-    event.preventDefault();
-    event.stopPropagation();
-    alert('check other items')
-  } 
-})
+  $('#task5').click(function(){
+    if (!flag1 || !flag2 || !flag3 || !flag4) {
+      event.preventDefault();
+      event.stopPropagation();
+      alert('check other items')
+    } 
+  })
 
 
 // Enter Key detect
@@ -182,300 +188,296 @@ $.fn.enterKey = function (fnc) {
 }
 
 });
-<!-- Running TinyMCE plugin -->	
+// <!-- Running TinyMCE plugin -->	
 function doit() {
-     var langCode = document.checkform.lang.value;
+
+    var langCode = document.checkform.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
-	 $('#hidemenot').hide();
+	   $('#hidemenot1').hide();
+  }
+  function doitEmail() {
+
+    var langCode = document.checkform2.lang.value;
+     tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
+     $('#hidemenot2').hide();
   }
 </script>
 <style>
-.defaultSkin table td {height:80%;}
-*{
-/*transition*/
--webkit-transition:.25s ease-in-out;
-   -moz-transition:.25s ease-in-out;
-     -o-transition:.25s ease-in-out;
-        transition:.25s ease-in-out;
-font-family:helvetica neue,helvetica,arial,sans-serif;
-font-size:18px;
-line-height:18px;
-box-sizing:border-box;
-margin:0;
-}
-body{
-background:#f8f8f8;
-}
-h1{
-text-align:center;
-padding:50px 0;
-font-size:30px;
-margin:0;
-font-weight:200;
-color:#454545;
-}
-h1 .fa-check{
-font-size:30px;
-margin-right:10px;
-color:#0eb0b7;
-}
-#todo-list{
-width:500px;
-margin:0 auto 50px auto;
-padding:50px;
-background:white;
-position:relative;
-/*box-shadow*/
--webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
-   -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
-        box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
-/*border-radius*/
--webkit-border-radius:5px;
-   -moz-border-radius:5px;
-        border-radius:5px;
-}
-#todo-list:before{
-content:"";
-position:absolute;
-z-index:-1;
-/*box-shadow*/
--webkit-box-shadow:0 0 20px rgba(0,0,0,0.4);
-   -moz-box-shadow:0 0 20px rgba(0,0,0,0.4);
-        box-shadow:0 0 20px rgba(0,0,0,0.4);
-top:50%;
-bottom:0;
-left:10px;
-right:10px;
-/*border-radius*/
--webkit-border-radius:100px / 10px;
-   -moz-border-radius:100px / 10px;
-        border-radius:100px / 10px;
-}
-.todo-wrap{
-display:block;
-position:relative;
-padding-left:35px;
-/*box-shadow*/
--webkit-box-shadow:0 2px 0 -1px #ebebeb;
-   -moz-box-shadow:0 2px 0 -1px #ebebeb;
-        box-shadow:0 2px 0 -1px #ebebeb;
-}
-.todo-wrap:last-of-type{
-/*box-shadow*/
--webkit-box-shadow:none;
-   -moz-box-shadow:none;
-        box-shadow:none;
-}
-input[type="checkbox"]{
-position:absolute;
-height:0;
-width:0;
-opacity:0;
-top:-600px;
-}
-
-.todo{
-display:inline-block;
-font-weight:200;
-padding:10px 5px;
-height:37px;
-position:relative;
-cursor: pointer;
-}
-.todo:before{
-content:'';
-display:block;
-position:absolute;
-top:calc(50% + 2px);
-left:0;
-width:0%;
-height:1px;
-background:#cd4400;
-/*transition*/
--webkit-transition:.25s ease-in-out;
-   -moz-transition:.25s ease-in-out;
-     -o-transition:.25s ease-in-out;
-        transition:.25s ease-in-out;
-}
-.todo:after{
-content:'';
-display:block;
-position:absolute;
-z-index:0;
-height:18px;
-width:18px;
-top:9px;
-left:-25px;
-/*box-shadow*/
--webkit-box-shadow:inset 0 0 0 2px #d8d8d8;
-   -moz-box-shadow:inset 0 0 0 2px #d8d8d8;
-        box-shadow:inset 0 0 0 2px #d8d8d8;
-/*transition*/
--webkit-transition:.25s ease-in-out;
-   -moz-transition:.25s ease-in-out;
-     -o-transition:.25s ease-in-out;
-        transition:.25s ease-in-out;
-/*border-radius*/
--webkit-border-radius:4px;
-   -moz-border-radius:4px;
-        border-radius:4px;
-}
-
-.todo:hover:after{
-/*box-shadow*/
--webkit-box-shadow:inset 0 0 0 2px #949494;
-   -moz-box-shadow:inset 0 0 0 2px #949494;
-        box-shadow:inset 0 0 0 2px #949494;
-}
-
-.todo .fa-check{
-position:absolute;
-z-index:1;
-left:-31px;
-top:0;
-font-size:1px;
-line-height:36px;
-width:36px;
-height:36px;
-text-align:center;
-color:transparent;
-text-shadow:1px 1px 0 white, -1px -1px 0 white;
-}
-:checked + .todo{
-color:red;
-}
-:checked + .todo:before{
-width:100%;
-}
-:checked + .todo:after{
-/*box-shadow*/
--webkit-box-shadow:inset 0 0 0 2px #0eb0b7;
-   -moz-box-shadow:inset 0 0 0 2px #0eb0b7;
-        box-shadow:inset 0 0 0 2px #0eb0b7;
-}
-:checked + .todo .fa-check{
-font-size:20px;
-line-height:35px;
-color:#0eb0b7;
-}
-/* Delete Items */
-
-.delete-item{
-display:block;
-position:absolute;
-height:36px;
-width:36px;
-line-height:36px;
-right:0;
-top:0;
-text-align:center;
-color:#d8d8d8;
-opacity:0;
-cursor: pointer
-}
-.todo-wrap:hover .delete-item{
-opacity:1;
-}
-.delete-item:hover{
-color:#cd4400;
-cursor: hover;
-}
-/* Add Items */
-
-#add-todo{
-padding:25px 0 0 0;
-font-size:14px;
-font-weight:200;
-color:#d8d8d8;
-display:inline-block;
-cursor:pointer;
-}
-#add-todo:hover{
-color:#6bc569;
-/*transition*/
--webkit-transition:none;
-   -moz-transition:none;
-     -o-transition:none;
-        transition:none;
-}
-#add-todo .fa-plus{
-font-size:14px;
-/*transition*/
--webkit-transition:none;
-   -moz-transition:none;
-     -o-transition:none;
-        transition:none;
-}
-.input-todo{
-border:none;
-outline:none;
-font-weight:200;
-position:relative;
-top:-1px;
-margin:0;
-padding:0;
-width:100%;
-}
-.editing{
+  .defaultSkin table td {height:80%;}
+  *{
+  /*transition*/
+  -webkit-transition:.25s ease-in-out;
+     -moz-transition:.25s ease-in-out;
+       -o-transition:.25s ease-in-out;
+          transition:.25s ease-in-out;
+  font-family:helvetica neue,helvetica,arial,sans-serif;
+  font-size:18px;
+  line-height:18px;
+  box-sizing:border-box;
+  margin:0;
+  }
+  body{
+  background:#f8f8f8;
+  }
+  h1{
+  text-align:center;
+  padding:50px 0;
+  font-size:30px;
+  margin:0;
+  font-weight:200;
+  color:#454545;
+  }
+  h1 .fa-check{
+  font-size:30px;
+  margin-right:10px;
+  color:#0eb0b7;
+  }
+  #todo-list{
+  width:500px;
+  margin:0 auto 50px auto;
+  padding:50px;
+  background:white;
+  position:relative;
+  /*box-shadow*/
+  -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
+     -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
+          box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
+  /*border-radius*/
+  -webkit-border-radius:5px;
+     -moz-border-radius:5px;
+          border-radius:5px;
+  }
+  #todo-list:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  /*box-shadow*/
+  -webkit-box-shadow:0 0 20px rgba(0,0,0,0.4);
+     -moz-box-shadow:0 0 20px rgba(0,0,0,0.4);
+          box-shadow:0 0 20px rgba(0,0,0,0.4);
+  top:50%;
+  bottom:0;
+  left:10px;
+  right:10px;
+  /*border-radius*/
+  -webkit-border-radius:100px / 10px;
+     -moz-border-radius:100px / 10px;
+          border-radius:100px / 10px;
+  }
+  .todo-wrap{
+  display:block;
+  position:relative;
+  padding-left:35px;
+  /*box-shadow*/
+  -webkit-box-shadow:0 2px 0 -1px #ebebeb;
+     -moz-box-shadow:0 2px 0 -1px #ebebeb;
+          box-shadow:0 2px 0 -1px #ebebeb;
+  }
+  .todo-wrap:last-of-type{
+  /*box-shadow*/
+  -webkit-box-shadow:none;
+     -moz-box-shadow:none;
+          box-shadow:none;
+  }
+  input[type="checkbox"]{
+  position:absolute;
   height:0;
-  overflow:hidden;
-}
+  width:0;
+  opacity:0;
+  top:-600px;
+  }
 
-.editing.todo-wrap {
-  box-shadow:0 0 400px rgba(0,0,0,.8),inset 0 0px 0 2px #ebebeb;
-}
+  .todo{
+  display:inline-block;
+  font-weight:200;
+  padding:10px 5px;
+  height:37px;
+  position:relative;
+  cursor: pointer;
+  }
+  .todo:before{
+  content:'';
+  display:block;
+  position:absolute;
+  top:calc(50% + 2px);
+  left:0;
+  width:0%;
+  height:1px;
+  background:#cd4400;
+  /*transition*/
+  -webkit-transition:.25s ease-in-out;
+     -moz-transition:.25s ease-in-out;
+       -o-transition:.25s ease-in-out;
+          transition:.25s ease-in-out;
+  }
+  .todo:after{
+  content:'';
+  display:block;
+  position:absolute;
+  z-index:0;
+  height:18px;
+  width:18px;
+  top:9px;
+  left:-25px;
+  /*box-shadow*/
+  -webkit-box-shadow:inset 0 0 0 2px #d8d8d8;
+     -moz-box-shadow:inset 0 0 0 2px #d8d8d8;
+          box-shadow:inset 0 0 0 2px #d8d8d8;
+  /*transition*/
+  -webkit-transition:.25s ease-in-out;
+     -moz-transition:.25s ease-in-out;
+       -o-transition:.25s ease-in-out;
+          transition:.25s ease-in-out;
+  /*border-radius*/
+  -webkit-border-radius:4px;
+     -moz-border-radius:4px;
+          border-radius:4px;
+  }
+
+  .todo:hover:after{
+  /*box-shadow*/
+  -webkit-box-shadow:inset 0 0 0 2px #949494;
+     -moz-box-shadow:inset 0 0 0 2px #949494;
+          box-shadow:inset 0 0 0 2px #949494;
+  }
+
+  .todo .fa-check{
+  position:absolute;
+  z-index:1;
+  left:-31px;
+  top:0;
+  font-size:1px;
+  line-height:36px;
+  width:36px;
+  height:36px;
+  text-align:center;
+  color:transparent;
+  text-shadow:1px 1px 0 white, -1px -1px 0 white;
+  }
+  :checked + .todo{
+  color:red;
+  }
+  :checked + .todo:before{
+  width:100%;
+  }
+  :checked + .todo:after{
+  /*box-shadow*/
+  -webkit-box-shadow:inset 0 0 0 2px #0eb0b7;
+     -moz-box-shadow:inset 0 0 0 2px #0eb0b7;
+          box-shadow:inset 0 0 0 2px #0eb0b7;
+  }
+  :checked + .todo .fa-check{
+  font-size:20px;
+  line-height:35px;
+  color:#0eb0b7;
+  }
+  /* Delete Items */
+
+  .delete-item{
+  display:block;
+  position:absolute;
+  height:36px;
+  width:36px;
+  line-height:36px;
+  right:0;
+  top:0;
+  text-align:center;
+  color:#d8d8d8;
+  opacity:0;
+  cursor: pointer
+  }
+  .todo-wrap:hover .delete-item{
+  opacity:1;
+  }
+  .delete-item:hover{
+  color:#cd4400;
+  cursor: hover;
+  }
+  /* Add Items */
+
+  #add-todo{
+  padding:25px 0 0 0;
+  font-size:14px;
+  font-weight:200;
+  color:#d8d8d8;
+  display:inline-block;
+  cursor:pointer;
+  }
+  #add-todo:hover{
+  color:#6bc569;
+  /*transition*/
+  -webkit-transition:none;
+     -moz-transition:none;
+       -o-transition:none;
+          transition:none;
+  }
+  #add-todo .fa-plus{
+  font-size:14px;
+  /*transition*/
+  -webkit-transition:none;
+     -moz-transition:none;
+       -o-transition:none;
+          transition:none;
+  }
+  .input-todo{
+  border:none;
+  outline:none;
+  font-weight:200;
+  position:relative;
+  top:-1px;
+  margin:0;
+  padding:0;
+  width:100%;
+  }
+  .editing{
+    height:0;
+    overflow:hidden;
+  }
+
+  .editing.todo-wrap {
+    box-shadow:0 0 400px rgba(0,0,0,.8),inset 0 0px 0 2px #ebebeb;
+  }
 
 </style>
 </head>
 <body style="display:flex">
-<div id='checkText' style="flex:2">
-  <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px"  id="urlOrEmail">
-    <form action="">
-      <input type="radio" name="type" value="url"> url<br>
-      <input type="radio" name="type" value="email"> email<br>
-    </form>
-  </div>
-  <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px;display:none" id="step1">
-  	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Fetching the text</h1>
-  	<form action="" id="form1" method="post" style="margin:20px;">
-  		<input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
-  		<input type="submit" id="submit1" name="Submit" value="Submit">
-  	</form>
-  	<div id="here"></div>
-  </div>
-  <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="step2">
-  	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
-  	<form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
-  		<p id="checktextpara"><textarea id="checktext" name="text" style="width:100%;height:80%;" >Paste your own text here... or check check this text.</textarea></p>
-  		<div>
-        <select name="lang" id="lang">
-            <option value="en-US">English</option>
-            <option value="de-DE">German</option>
-            <option value="it">Italian</option>
-        </select>
-        <input type="submit" name="_action_checkText"
-            value="Check Text" onClick="doit();return false;"> 
-        <div id="feedbackErrorMessage" style="color: red;"></div>
+<!-- spell check html -->
+  <div id='checkTextDiv' style="flex:2">
+    <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:2px"  id="urlOrEmail">
+      <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">Check for URL or Email?</h1>
+      <form action="">
+        <input type="radio" name="type" value="url">url<br>
+        <input type="radio" name="type" value="email"> email<br>
+      </form>
     </div>
-  	</form>
-  </div>
-  <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="checkEmail">
-    <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">Check Email</h1>
-    <form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
-      <p id="checktextpara"><textarea id="checktext" name="text" style="width:100%;height:80%;" >Paste your own text here... or check check this text.</textarea></p>
-      <div>
-        <select name="lang" id="lang">
-            <option value="en-US">English</option>
-            <option value="de-DE">German</option>
-            <option value="it">Italian</option>
-        </select>
-        <input type="submit" name="_action_checkText"
-            value="Check Text" onClick="doit();return false;"> 
-        <div id="feedbackErrorMessage" style="color: red;"></div>
-    </div>
-    </form>
-  </div>
+    <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px;display:none" id="step1">
+    	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Fetching the text</h1>
+    	<form action="" id="form1" method="post" style="margin:20px;">
+    <input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
+    <input type="submit" id="submit1" name="Submit" value="Submit">
+  </form>
+  <div id="here"></div>
 </div>
+<div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none;" id="step2">
+  <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
+  <form id="form2" name="checkform" action="" method="post" style="margin:20px;">
+    <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;" >Paste your own text here... or check check this text.</textarea></p>
+    <input type="submit" id="hidemenot1" name="_action_checkText"
+          value="Check Text" onclick="doit();return false;">
+    <input type="hidden" name="lang" id="lang" value="en-US">
+  </form>
+    </div>
+    <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="checkEmail">
+      <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Check Email</h1>
+      <form id="form2" name="checkform2" action="https://community.languagetool.org" method="post" style="margin:20px;">
+      <p id="checktextpara"><textarea id="checktext2" name="text" style="width:100%;height:80%;" >Paste your own text here... or check check this text.</textarea></p>
+      <input type="button" id="hidemenot2" name="_action_checkText"
+            value="Check Text" onclick="doitEmail();return false;">
+      <input type="hidden" name="lang" id="lang" value="en-US">
+    </form>
+    </div>
+  </div>
+  <!-- checklist html -->
   <div id="checkList" style="flex:1">
     <h1><i class="fa fa-check"></i>Checklist</h1>
     <form id="todo-list">
