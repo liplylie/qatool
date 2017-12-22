@@ -2,8 +2,10 @@
 <head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://www.languagetool.org/online-check/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="editor_plugin2.js"></script>
+<script type="text/javascript"
+    src="https://www.languagetool.org/online-check/tiny_mce/plugins/atd-tinymce/editor_plugin2.js"></script>
 <script>
+
 <!-- Initialize TinyMCE -->
  tinyMCE.init({
 		 mode : "textareas",
@@ -36,10 +38,19 @@ $(document).ready(function($){
   let flag1 = false
   let flag2 = false
   let flag3 = false
+  let flag4 = false
 
+  $("#urlOrEmail input[name='type']").click(function(){
+    if($('input:radio[name=type]:checked').val() == "url"){
+      $('#step1').show();
+    } else {
+      $('#checkEmail').show();
+    }
+  })
 
 	$('#form1').on('submit',function(event){
 		event.preventDefault();
+ 
 		$.ajax({
 		    url: 'fetch.php?url=' + $('input[name=url]').val(),
 		    type: 'GET',
@@ -47,7 +58,11 @@ $(document).ready(function($){
 			  $('#step1').hide();
 			  $('#step2').show();
 			  $(tinymce.get('checktext').getBody()).html( res );
-			}
+			 },
+       error: function(err) {
+        console.log(err)
+        alert(JSON.stringify(err))
+       }
 		});
 	});
 
@@ -112,7 +127,6 @@ $('.delete-item').click(function(){
 
 $('#task1').click(function(){
   flag1 = true
-  console.log('hi')
 })
 
 $('#task2').click(function(event){
@@ -141,8 +155,16 @@ $('#task4').click(function(){
     event.stopPropagation();
     alert('check other items')
   } else {
-    flag3 = true
+    flag4 = true
   }
+})
+
+$('#task5').click(function(){
+  if (!flag1 || !flag2 || !flag3 || !flag4) {
+    event.preventDefault();
+    event.stopPropagation();
+    alert('check other items')
+  } 
 })
 
 
@@ -405,70 +427,113 @@ width:100%;
 
 </style>
 </head>
-<body>
-<div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px" id="step1">
-	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Fetching the text</h1>
-	<form action="" id="form1" method="post" style="margin:20px;">
-		<input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
-		<input type="submit" id="submit1" name="Submit" value="Submit">
-	</form>
-	<div id="here"></div>
-</div>
-<div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none;" id="step2">
-	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
-	<form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
-		<p id="checktextpara"><textarea id="checktext" name="text" style="width:100%;height:80%;" >Paste your own text here... or check check this text.</textarea></p>
-		<input type="submit" id="hidemenot" name="_action_checkText"
-          value="Check Text" onClick="doit();return false;">
-		<input type="hidden" name="lang" id="lang" value="en-US">
-	</form>
-</div>
-<h1><i class="fa fa-check"></i>Checklist</h1>
-<form id="todo-list">
-  <span class="todo-wrap">
-    <input type="checkbox" id="1" />
-    <label for="1" class="todo" id="task1">
-      <i class="fa fa-check"></i>
-      check capitalization 
-    </label>
-    <span class="delete-item" title="remove">
-      <i class="fa fa-times-circle"></i>
-    </span>
-  </span>
-  <span class="todo-wrap">
-    <input type="checkbox" id="2"/>
-    <label for="2" class="todo" id="task2">
-      <i class="fa fa-check"></i>
-      check links
-    </label>
-    <span class="delete-item" title="remove">
-      <i class="fa fa-times-circle"></i>
-    </span>
-  </span>
-  <span class="todo-wrap">
-    <input type="checkbox" id="3"/>
-    <label for="3" class="todo" id="task3">
-      <i class="fa fa-check"></i>
-      check mobile and tablet versions
-    </label>
-    <span class="delete-item" title="remove">
-      <i class="fa fa-times-circle"></i>
-    </span>
-  </span>
-	<span class="todo-wrap">
-    <input type="checkbox" id="4" />
-    <label for="4" class="todo" id="task4">
-      <i class="fa fa-check"></i>
-       check everything else all together
-    </label>
-    <span class="delete-item" title="remove">
-      <i class="fa fa-times-circle"></i>
-    </span>
-  </span>
-  <div id="add-todo">
-    <i class="fa fa-plus"></i>
-    Add an Item
+<body style="display:flex">
+<div id='checkText' style="flex:2">
+  <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px"  id="urlOrEmail">
+    <form action="">
+      <input type="radio" name="type" value="url"> url<br>
+      <input type="radio" name="type" value="email"> email<br>
+    </form>
   </div>
-</form>
+  <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px;display:none" id="step1">
+  	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Fetching the text</h1>
+  	<form action="" id="form1" method="post" style="margin:20px;">
+  		<input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
+  		<input type="submit" id="submit1" name="Submit" value="Submit">
+  	</form>
+  	<div id="here"></div>
+  </div>
+  <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="step2">
+  	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
+  	<form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
+  		<p id="checktextpara"><textarea id="checktext" name="text" style="width:100%;height:80%;" >Paste your own text here... or check check this text.</textarea></p>
+  		<div>
+        <select name="lang" id="lang">
+            <option value="en-US">English</option>
+            <option value="de-DE">German</option>
+            <option value="it">Italian</option>
+        </select>
+        <input type="submit" name="_action_checkText"
+            value="Check Text" onClick="doit();return false;"> 
+        <div id="feedbackErrorMessage" style="color: red;"></div>
+    </div>
+  	</form>
+  </div>
+  <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="checkEmail">
+    <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">Check Email</h1>
+    <form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
+      <p id="checktextpara"><textarea id="checktext" name="text" style="width:100%;height:80%;" >Paste your own text here... or check check this text.</textarea></p>
+      <div>
+        <select name="lang" id="lang">
+            <option value="en-US">English</option>
+            <option value="de-DE">German</option>
+            <option value="it">Italian</option>
+        </select>
+        <input type="submit" name="_action_checkText"
+            value="Check Text" onClick="doit();return false;"> 
+        <div id="feedbackErrorMessage" style="color: red;"></div>
+    </div>
+    </form>
+  </div>
+</div>
+  <div id="checkList" style="flex:1">
+    <h1><i class="fa fa-check"></i>Checklist</h1>
+    <form id="todo-list">
+      <span class="todo-wrap">
+        <input type="checkbox" id="1" />
+        <label for="1" class="todo" id="task1">
+          <i class="fa fa-check"></i>
+          check capitalization 
+        </label>
+        <span class="delete-item" title="remove">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </span>
+      <span class="todo-wrap">
+        <input type="checkbox" id="2"/>
+        <label for="2" class="todo" id="task2">
+          <i class="fa fa-check"></i>
+           check links <a style="color: blue; font-size: 14, font-weight: Helvetica" href="https://validator.w3.org/checklink" target="_blank">check here</a>
+        </label>
+        <span class="delete-item" title="remove">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </span>
+      <span class="todo-wrap">
+        <input type="checkbox" id="3"/>
+        <label for="3" class="todo" id="task3">
+          <i class="fa fa-check"></i>
+          check mobile and tablet versions <a style="color: blue; font-size: 14, font-weight: Helvetica" href="http://mobiletest.me/" target="_blank"> check here</a>
+        </label>
+        <span class="delete-item" title="remove">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </span>
+    	<span class="todo-wrap">
+        <input type="checkbox" id="4" />
+        <label for="4" class="todo" id="task4">
+          <i class="fa fa-check"></i>
+           check the text in images 
+        </label>
+        <span class="delete-item" title="remove">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </span>
+      <span class="todo-wrap">
+        <input type="checkbox" id="5" />
+        <label for="5" class="todo" id="task5">
+          <i class="fa fa-check"></i>
+           check everything else all together 
+        </label>
+        <span class="delete-item" title="remove">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </span>
+      <div id="add-todo">
+        <i class="fa fa-plus"></i>
+        Add an Item
+      </div>
+    </form>
+  </div>
 </body>
 </html>
