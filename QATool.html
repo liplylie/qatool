@@ -16,11 +16,39 @@
   		 ed.pasteAsPlainText = true;
   	 });
    },
-   languagetool_i18n_current_lang : function() { return document.checkform.lang.value; },
-   languagetool_rpc_url : "https://languagetool.org/api/v2/check",
-   languagetool_css_url :
-  	 "https://www.languagetool.org/online-check/" +
-  	 "tiny_mce/plugins/atd-tinymce/css/content.css",
+   languagetool_i18n_no_errors : {
+       // "No errors were found.":
+       "de-DE": "Keine Fehler gefunden."
+     },
+     languagetool_i18n_explain : {
+       // "Explain..." - shown if there is an URL with a detailed description:
+       "de-DE": "Mehr Informationen..."
+     },
+     languagetool_i18n_ignore_once : {
+       // "Ignore this error":
+       "de-DE": "Hier ignorieren"
+     },
+     languagetool_i18n_ignore_all : {
+       // "Ignore this kind of error":
+       "de-DE": "Fehler dieses Typs ignorieren",
+       "de-US": "Fehler dieses Typs ignorieren"
+     },
+     languagetool_i18n_rule_implementation : {
+       // "Rule implementation":
+       "de-DE": "Implementierung der Regel"
+     },
+   
+     languagetool_i18n_current_lang :
+       function() { return document.checkform.lang.value; },
+     /* The URL of your LanguageTool server.
+      If you use your own server here and it's not running on the same domain 
+      as the text form, make sure the server gets started with '--allow-origin ...' 
+      and use 'https://your-server/v2/check' as URL: */
+     languagetool_rpc_url                 : "https://languagetool.org/api/v2/check",
+     /* edit this file to customize how LanguageTool shows errors: */
+     languagetool_css_url :
+       "https://www.languagetool.org/online-check/" +
+       "tiny_mce/plugins/atd-tinymce/css/content.css",
    theme                              : "advanced",
    theme_advanced_buttons1            : "",
    theme_advanced_buttons2            : "",
@@ -46,6 +74,7 @@ $(document).ready(function($){
     if($('input:radio[name=type]:checked').val() == "url"){
       $('#step1').show();
       $('#checkEmail').hide();
+      $('#step2').hide();
       //$('#urlOrEmail').hide();
     } else {
       $('#checkEmail').show();
@@ -190,13 +219,13 @@ $.fn.enterKey = function (fnc) {
 });
 // <!-- Running TinyMCE plugin -->	
 function doit() {
-
+    console.log('doit')
     var langCode = document.checkform.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
 	   $('#hidemenot1').hide();
   }
   function doitEmail() {
-
+console.log('doitemail')
     var langCode = document.checkform2.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
      $('#hidemenot2').hide();
@@ -446,22 +475,22 @@ function doit() {
     <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:2px"  id="urlOrEmail">
       <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">Check for URL or Email?</h1>
       <form action="">
-        <input type="radio" name="type" value="url">url<br>
+        <input type="radio" name="type" value="url"> url<br>
         <input type="radio" name="type" value="email"> email<br>
       </form>
     </div>
     <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px;display:none" id="step1">
     	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Fetching the text</h1>
     	<form action="" id="form1" method="post" style="margin:20px;">
-    <input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
-    <input type="submit" id="submit1" name="Submit" value="Submit">
-  </form>
+        <input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
+        <input type="submit" id="submit1" name="Submit" value="Submit">
+      </form>
   <div id="here"></div>
 </div>
 <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none;" id="step2">
   <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
   <form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
-    <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;" >Paste your own text here... or check check this text.</textarea></p>
+    <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
     <input type="submit" id="hidemenot1" name="_action_checkText"
           value="Check Text" onclick="doit();return false;">
     <input type="hidden" name="lang" id="lang" value="en-US">
@@ -469,12 +498,13 @@ function doit() {
     </div>
     <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="checkEmail">
       <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Check Email</h1>
-      <form id="form2" name="checkform2" action="https://community.languagetool.org" method="post" style="margin:20px;">
-      <p id="checktextpara"><textarea id="checktext2" name="text" style="width:100%;height:80%;" >Paste your own text here... or check check this text.</textarea></p>
-      <input type="submit" id="hidemenot2" name="_action_checkText"
-            value="Check Text" onclick="doitEmail();return false;">
-      <input type="hidden" name="lang" id="lang" value="en-US">
-    </form>
+      <form id="form3" name="checkform2" action="https://community.languagetool.org" method="post" style="margin:20px;">
+        <p id="checktextpara"><textarea id="checktext2" name="text" style="width:100%;height:80%;" >Paste email text here</textarea>
+        </p>
+        <input type="submit" id="hidemenot2" name="_action_checkText2"
+              value="Check Text" onclick="doitEmail();return false;">
+        <input type="hidden" name="lang" id="lang" value="en-US">
+      </form>
     </div>
   </div>
   <!-- checklist html -->
