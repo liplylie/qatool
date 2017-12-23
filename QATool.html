@@ -75,11 +75,13 @@ $(document).ready(function($){
       $('#step1').show();
       $('#checkEmail').hide();
       $('#step2').hide();
+      $('#hidemenot1').show();
       //$('#urlOrEmail').hide();
     } else {
       $('#checkEmail').show();
       $('#step1').hide();
       $('#step2').hide();
+      $('#hidemenot2').show();
       //$('#urlOrEmail').hide();
     }
   })
@@ -223,27 +225,27 @@ function doit() {
     var langCode = document.checkform.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
 	   $('#hidemenot1').hide();
+     $('#ignoreAll1').show()
   }
   function doitEmail() {
     var langCode = document.checkform2.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
      $('#hidemenot2').hide();
+     $('#ignoreAll2').show()
   }
-  function ignoreAll(){
-    console.log('ignore')
-    var iframe = document.getElementById("checktext1_ifr")
-    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-    var paras = innerDoc.getElementsByClassName('hiddenSpellError');
-    console.log(paras, 'paras')
-    for (let i = paras.length; i--; ) {
-      paras[i].classList.remove('hiddenSpellError');
-    }
-    // if (paras){
-    //   while(paras[0]) {
-    //     paras[0].parentNode.removeChild(paras[0]);
-    //   }​
-    // }
-    
+  function ignoreAll(number){
+    let iframe = document.getElementById(`checktext${number}_ifr`)
+    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
+    console.log(innerDoc, 'innderDOc')
+    let spellError = innerDoc.getElementsByClassName('hiddenSpellError')
+    console.log(spellError, 'spellError')
+    for (let i = spellError.length; i--; ) {
+      spellError[i].classList.remove('hiddenSpellError');
+    } 
+    let grammarError = innerDoc.getElementsByClassName('hiddenGrammarError' )
+    for (let i = grammarError.length; i--; ) {
+      grammarError[i].classList.remove('hiddenGrammarError');
+    } 
   }
 </script>
 <style>
@@ -508,7 +510,7 @@ function doit() {
     <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
     <input type="submit" id="hidemenot1" name="_action_checkText"
           value="Check Text" onclick="doit();return false;">
-    <input type="button" value="Ignore All" onclick="ignoreAll(); return false">
+    <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false" style="display:none">
     <input type="hidden" name="lang" id="lang" value="en-US">
   </form>
     </div>
@@ -519,6 +521,7 @@ function doit() {
         </p>
         <input type="submit" id="hidemenot2" name="_action_checkText2"
               value="Check Text" onclick="doitEmail();return false;">
+        <input id="ignoreAll2" type="button" value="Ignore All" onclick="ignoreAll(2); return false" style="display:none">
         <input type="hidden" name="lang" id="lang" value="en-US">
       </form>
     </div>
