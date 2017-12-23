@@ -31,7 +31,7 @@
      languagetool_i18n_ignore_all : {
        // "Ignore this kind of error":
        "de-DE": "Fehler dieses Typs ignorieren",
-       "de-US": "Fehler dieses Typs ignorieren"
+
      },
      languagetool_i18n_rule_implementation : {
        // "Rule implementation":
@@ -225,10 +225,25 @@ function doit() {
 	   $('#hidemenot1').hide();
   }
   function doitEmail() {
-console.log('doitemail')
     var langCode = document.checkform2.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
      $('#hidemenot2').hide();
+  }
+  function ignoreAll(){
+    console.log('ignore')
+    var iframe = document.getElementById("checktext1_ifr")
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var paras = innerDoc.getElementsByClassName('hiddenSpellError');
+    console.log(paras, 'paras')
+    for (let i = paras.length; i--; ) {
+      paras[i].classList.remove('hiddenSpellError');
+    }
+    // if (paras){
+    //   while(paras[0]) {
+    //     paras[0].parentNode.removeChild(paras[0]);
+    //   }​
+    // }
+    
   }
 </script>
 <style>
@@ -493,6 +508,7 @@ console.log('doitemail')
     <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
     <input type="submit" id="hidemenot1" name="_action_checkText"
           value="Check Text" onclick="doit();return false;">
+    <input type="button" value="Ignore All" onclick="ignoreAll(); return false">
     <input type="hidden" name="lang" id="lang" value="en-US">
   </form>
     </div>
