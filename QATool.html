@@ -257,6 +257,10 @@ function doit() {
     console.log(innerDoc, 'spacing ')
     let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
     console.log(bodyText, 'bodyText')
+    bodyText = bodyText.replace(/,(?=[^\s])/g, ", ");
+    bodyText = bodyText.replace(/\?/g, '? ')
+    bodyText = bodyText.replace(/--/g, ' ')
+    bodyText = bodyText.replace(/\s+(\W)/g, "$1");
     $(tinymce.get(`checktext${number}`).getBody()).html( bodyText );
   }
 </script>
