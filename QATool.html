@@ -224,15 +224,18 @@ function doit() {
     console.log('doit')
     var langCode = document.checkform.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
-	   $('#hidemenot1').hide();
+	   //$('#hidemenot1').hide();
      $('#ignoreAll1').show()
+     $('#fixSpacing').show()
   }
   function doitEmail() {
     var langCode = document.checkform2.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
-     $('#hidemenot2').hide();
+     //$('#hidemenot2').hide();
      $('#ignoreAll2').show()
+    $('#fixSpacing2').show()
   }
+  // ignore all button
   function ignoreAll(number){
     let iframe = document.getElementById(`checktext${number}_ifr`)
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
@@ -246,6 +249,15 @@ function doit() {
     for (let i = grammarError.length; i--; ) {
       grammarError[i].classList.remove('hiddenGrammarError');
     } 
+  }
+  // fix spacing
+  function Spacing(number){   
+    let iframe = document.getElementById(`checktext${number}_ifr`)
+    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
+    console.log(innerDoc, 'spacing ')
+    let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
+    console.log(bodyText, 'bodyText')
+    $(tinymce.get(`checktext${number}`).getBody()).html( bodyText );
   }
 </script>
 <style>
@@ -510,7 +522,8 @@ function doit() {
     <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
     <input type="submit" id="hidemenot1" name="_action_checkText"
           value="Check Text" onclick="doit();return false;">
-    <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false" style="display:none">
+    <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false;" style="display:none"/>
+    <input id="fixSpacing" type="button" value="Fix Spacing" onclick="Spacing(1); return false;" style="display:none"/>
     <input type="hidden" name="lang" id="lang" value="en-US">
   </form>
     </div>
@@ -522,6 +535,7 @@ function doit() {
         <input type="submit" id="hidemenot2" name="_action_checkText2"
               value="Check Text" onclick="doitEmail();return false;">
         <input id="ignoreAll2" type="button" value="Ignore All" onclick="ignoreAll(2); return false" style="display:none">
+        <input id="fixSpacing2" type="button" value="Fix Spacing" onclick="Spacing(2); return false;" style="display:none"/>
         <input type="hidden" name="lang" id="lang" value="en-US">
       </form>
     </div>
