@@ -220,28 +220,37 @@ $.fn.enterKey = function (fnc) {
 
 });
 // <!-- Running TinyMCE plugin -->	
-function doit() {
+  function doit() {
     console.log('doit')
     var langCode = document.checkform.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
 	   //$('#hidemenot1').hide();
      $('#ignoreAll1').show()
      $('#fixSpacing').show()
+     $('#checkCap').show()
+  }
+  // checks for Capitalized words
+  function checkCaps(number) {
+    let iframe = document.getElementById(`checktext${number}_ifr`)
+    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
+    let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
+    let allCapWords = bodyText.match(/[A-Z]+[a-z]+/g);
+    console.log(allCapWords,' check cap')
   }
   function doitEmail() {
     var langCode = document.checkform2.lang.value;
-     tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
+    tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
      //$('#hidemenot2').hide();
-     $('#ignoreAll2').show()
+    $('#ignoreAll2').show()
     $('#fixSpacing2').show()
   }
   // ignore all button
   function ignoreAll(number){
     let iframe = document.getElementById(`checktext${number}_ifr`)
-    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
-    console.log(innerDoc, 'innderDOc')
+    let innerDoc = iframe.contentWindow.document.body.innerHTML
+    // console.log(innerDoc, 'innderDOc')
     let spellError = innerDoc.getElementsByClassName('hiddenSpellError')
-    console.log(spellError, 'spellError')
+    // console.log(spellError, 'spellError')
     for (let i = spellError.length; i--; ) {
       spellError[i].classList.remove('hiddenSpellError');
     } 
@@ -250,17 +259,24 @@ function doit() {
       grammarError[i].classList.remove('hiddenGrammarError');
     } 
   }
+  // ignore all instance of word
+  function ignoreAllWord(word){
+    let id = 'menu_checktext1_spellcheckermenu'
+  }
   // fix spacing
   function Spacing(number){   
     let iframe = document.getElementById(`checktext${number}_ifr`)
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
-    console.log(innerDoc, 'spacing ')
+    // console.log(innerDoc, 'spacing ')
     let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
-    console.log(bodyText, 'bodyText')
-    bodyText = bodyText.replace(/,(?=[^\s])/g, ", ");
+    // console.log(bodyText, 'bodyText')
+    bodyText = bodyText.replace(/,/g, ', ')
+    bodyText = bodyText.replace(/"/g, '" ')
+    //bodyText = bodyText.replace(/\"/g, ' " ');
     bodyText = bodyText.replace(/\?/g, '? ')
     bodyText = bodyText.replace(/--/g, ' ')
-    bodyText = bodyText.replace(/\s+(\W)/g, "$1");
+    bodyText = bodyText.replace(/\s+(\W)/g, "$1")
+    bodyText = bodyText.replace(/\./g, '. ')
     $(tinymce.get(`checktext${number}`).getBody()).html( bodyText );
   }
 </script>
@@ -431,7 +447,7 @@ function doit() {
   :checked + .todo .fa-check{
   font-size:20px;
   line-height:35px;
-  color:#0eb0b7;
+  color:#0eb0b7; 
   }
   /* Delete Items */
 
@@ -526,6 +542,7 @@ function doit() {
     <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
     <input type="submit" id="hidemenot1" name="_action_checkText"
           value="Check Text" onclick="doit();return false;">
+    <input type="button" id="checkCap" value="Check For capitalization" style="display:none" onclick="checkCaps(1) ;return false;">
     <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false;" style="display:none"/>
     <input id="fixSpacing" type="button" value="Fix Spacing" onclick="Spacing(1); return false;" style="display:none"/>
     <input type="hidden" name="lang" id="lang" value="en-US">
@@ -554,9 +571,6 @@ function doit() {
           <i class="fa fa-check"></i>
           check capitalization 
         </label>
-        <span class="delete-item" title="remove">
-          <i class="fa fa-times-circle"></i>
-        </span>
       </span>
       <span class="todo-wrap">
         <input type="checkbox" id="2"/>
@@ -564,9 +578,6 @@ function doit() {
           <i class="fa fa-check"></i>
            check links <a style="color: blue; font-size: 14, font-weight: Helvetica" href="https://validator.w3.org/checklink" target="_blank">check here</a>
         </label>
-        <span class="delete-item" title="remove">
-          <i class="fa fa-times-circle"></i>
-        </span>
       </span>
       <span class="todo-wrap">
         <input type="checkbox" id="3"/>
@@ -574,9 +585,6 @@ function doit() {
           <i class="fa fa-check"></i>
           check mobile and tablet versions <a style="color: blue; font-size: 14, font-weight: Helvetica" href="http://mobiletest.me/" target="_blank"> check here</a>
         </label>
-        <span class="delete-item" title="remove">
-          <i class="fa fa-times-circle"></i>
-        </span>
       </span>
     	<span class="todo-wrap">
         <input type="checkbox" id="4" />
@@ -584,9 +592,6 @@ function doit() {
           <i class="fa fa-check"></i>
            check the text in images 
         </label>
-        <span class="delete-item" title="remove">
-          <i class="fa fa-times-circle"></i>
-        </span>
       </span>
       <span class="todo-wrap">
         <input type="checkbox" id="5" />
@@ -594,9 +599,6 @@ function doit() {
           <i class="fa fa-check"></i>
            check everything else all together 
         </label>
-        <span class="delete-item" title="remove">
-          <i class="fa fa-times-circle"></i>
-        </span>
       </span>
       <div id="add-todo">
         <i class="fa fa-plus"></i>
