@@ -62,13 +62,16 @@
   	 gecko_spellcheck                   : false
 	});
 <!-- Fetching post text -->	
-$(document).ready(function($){
-  // flags are for checklist logic
+  let superFlag1 = false
   let flag1 = false
+  let superFlag2 = false
   let flag2 = false
   let flag3 = false
   let flag4 = false
 
+$(document).ready(function($){
+  // flags are for checklist logic
+  
   //ask to check for either url or email
   $("#urlOrEmail input[name='type']").click(function(){
     if($('input:radio[name=type]:checked').val() == "url"){
@@ -163,14 +166,21 @@ $(document).ready(function($){
   // checklist logic
 
   $('#task1').click(function(){
-    flag1 = true
+    if (!superFlag1){
+      event.preventDefault();
+      event.stopPropagation();
+      alert('continue to work')
+    } else {
+      flag1 = true
+    }
+    
   })
 
   $('#task2').click(function(event){
-    if (!flag1) {
+    if (!flag1 || !superFlag2) {
       event.preventDefault();
       event.stopPropagation();
-      alert('check first item')
+      alert('please continue to work')
     } else {
       flag2 = true
     }
@@ -228,14 +238,57 @@ $.fn.enterKey = function (fnc) {
      $('#ignoreAll1').show()
      $('#fixSpacing').show()
      $('#checkCap').show()
+     $('#hidemenot1').hide()
   }
   // checks for Capitalized words
   function checkCaps(number) {
+    $('#checkCap').hide()
+    $('#fixSpacing').hide()
+    $('#completeCaps').show()
+    ignoreAll(number)
     let iframe = document.getElementById(`checktext${number}_ifr`)
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
     let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
+    bodyText = bodyText.replace(/,/g, ', ')
+    bodyText = bodyText.replace(/"/g, '" ')
+    bodyText = bodyText.replace(/\?/g, '? ')
+    bodyText = bodyText.replace(/--/g, ' ')
+    bodyText = bodyText.replace(/\s+(\W)/g, "$1")
+    bodyText = bodyText.replace(/\./g, '. ')
     let allCapWords = bodyText.match(/[A-Z]+[a-z]+/g);
+    allCapWords = allCapWords.filter(function(elem, pos) {
+      return allCapWords.indexOf(elem) === pos;
+    });
+    //let iframeCheck = $(`#checktext${number}_ifr`).contents().find('body').find('p').text()
+    //console.log(iframeCheck, 'iframeCheck')
+    for (let i = 0; i < allCapWords.length; i++ ) {
+      bodyText = bodyText.replace(new RegExp(allCapWords[i], 'g'),`<span class='hiddenSpellError' onkeypress="MORFOLOGIK_RULE_EN_US---#---undefined---#---Possible spelling mistake found---#--- ---#------#---${allCapWords[i]}">${allCapWords[i]}</span>`)
+      //`<span class="hiddenSpellError">${allCapWords[i]}></span>`
+      //:contains(${allCapWords[i]})
+      //allCapWords[i].classList.add('hiddenSpellError');
+    } 
+    console.log(bodyText, 'bodyText')
     console.log(allCapWords,' check cap')
+    $(tinymce.get('checktext1').getBody()).html( bodyText );
+  }
+  function finishCaps(){
+    superFlag1 = true
+    alert('found all capitalization errors!')
+    alert('please check for active and broken links')
+    flag1 = true
+    $('#task1').trigger('click')
+    $('#completeCaps').hide()
+    $('#completeLinks').show()
+    $('ignoreAll1').hide()
+    
+  }
+  function finishLinks(){
+    superFlag2 = true
+    flag2 = true
+    alert('found all link related issues')
+    alert('please check for mobile and tablet versions of website')
+    $('#task2').trigger('click')
+    $('#completeLinks').hide()
   }
   function doitEmail() {
     var langCode = document.checkform2.lang.value;
@@ -247,10 +300,10 @@ $.fn.enterKey = function (fnc) {
   // ignore all button
   function ignoreAll(number){
     let iframe = document.getElementById(`checktext${number}_ifr`)
-    let innerDoc = iframe.contentWindow.document.body.innerHTML
+    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
     // console.log(innerDoc, 'innderDOc')
     let spellError = innerDoc.getElementsByClassName('hiddenSpellError')
-    // console.log(spellError, 'spellError')
+    //console.log(spellError, 'spellError')
     for (let i = spellError.length; i--; ) {
       spellError[i].classList.remove('hiddenSpellError');
     } 
@@ -296,6 +349,9 @@ $.fn.enterKey = function (fnc) {
   }
   body{
   background:#f8f8f8;
+  }
+  .highlight{
+    background-color:'yellow';
   }
   h1{
   text-align:center;
@@ -543,7 +599,10 @@ $.fn.enterKey = function (fnc) {
     <input type="submit" id="hidemenot1" name="_action_checkText"
           value="Check Text" onclick="doit();return false;">
     <input type="button" id="checkCap" value="Check For capitalization" style="display:none" onclick="checkCaps(1) ;return false;">
+    <input type="button" id="checkLinks" value="Check links" style="display:none" onclick="checkLinks(1) ;return false;">
     <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false;" style="display:none"/>
+    <input id="completeCaps" type="button" value="Finished Cap Check" onclick="finishCaps(); return false;" style="display:none"/>
+    <input id="completeLinks" type="button" value="Finished Link Check" onclick="finishLinks(); return false;" style="display:none"/>
     <input id="fixSpacing" type="button" value="Fix Spacing" onclick="Spacing(1); return false;" style="display:none"/>
     <input type="hidden" name="lang" id="lang" value="en-US">
   </form>
