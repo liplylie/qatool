@@ -156,39 +156,6 @@ $(document).ready(function($){
     setTimeout(function(){ $(parentItem).remove(); }, 1000);
   });
 
-  // scroll button logic
-   $("#hidemenot1").hide();
-   //let iframeElement = document.getElementById(`checktext1_ifr`)
-
-    // $("#checktext1_ifr").scroll(function() {  
-    //    if($("#checktext1_ifr").scrollTop() == 100 ){
-    //      alert('Bottom reached');    
-    //    }
-    //    })
-
-   
-
-
-//     $("#checktext1_ifr body p").scroll(function(){
-//       console.log('asdfasdf')
-//     })
-//   $("#checktext1_ifr").scroll(function(){
-//     console.log('scrool')
-//     var docScroll = $("#checktext1_ifr").scrollTop(), 
-//         boxCntOfset = $("#hidemenot1").offset().top - 100;
-    
- 
-//     //when rich top of boxex than fire
-//     if(docScroll >= boxCntOfset ) {
-
-//       $("#hidemenot1").fadeIn(200)
-    
-//     } else {
-//      $("#hidemenot1").fadeOut(200)
-    
-//     }  
-// });
-
   // checklist logic
 
   $('#task1').click(function(){
@@ -260,18 +227,24 @@ $.fn.enterKey = function (fnc) {
     var langCode = document.checkform.lang.value;
      tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
 	   //$('#hidemenot1').hide();
-     $('#ignoreAll1').show()
+     
      $('#fixSpacing').hide()
-     $('#checkCap').show()
+     
      $('#hidemenot1').hide()
+     // i frame scroll listener
      $("#checktext1_ifr").ready(function () {
-     var iframe = $("#checktext1_ifr").contents();
-     console.log(iframe, 'asdf')
-    $(iframe).scroll(function () { 
-        //your code here
-        console.log('hi')
-    });
-});
+        let iframeC = $("#checktext1_ifr").contents();
+        $(iframeC).scroll(function () { 
+          //your code here
+          console.log($(iframeC).scrollTop(), 'top')
+          console.log($(iframeC).height(), 'doc height')
+          console.log('hi')
+          if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+            $('#checkCap').show()
+            $('#ignoreAll1').show()    
+          }
+        })
+      });
   }
   // checks for Capitalized words
   function checkCaps(number) {
