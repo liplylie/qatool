@@ -17,31 +17,25 @@
   	 });
    },
    languagetool_i18n_no_errors : {
-       // "No errors were found.":
        "de-DE": "Keine Fehler gefunden."
      },
-     languagetool_i18n_explain : {
-       // "Explain..." - shown if there is an URL with a detailed description:
-       "de-DE": "Mehr Informationen..."
-     },
-     languagetool_i18n_ignore_once : {
-       // "Ignore this error":
-       "de-DE": "Hier ignorieren"
-     },
-     languagetool_i18n_ignore_all : {
-       // "Ignore this kind of error":
-       "de-DE": "Fehler dieses Typs ignorieren",
-
-     },
-     languagetool_i18n_rule_implementation : {
-       // "Rule implementation":
-       "de-DE": "Implementierung der Regel"
-     },
-     languagetool_i18n_current_lang :
-       function() { return document.checkform.lang.value; },
-     languagetool_rpc_url: "https://languagetool.org/api/v2/check",
-     languagetool_css_url:"https://www.languagetool.org/online-check/" +
-       "tiny_mce/plugins/atd-tinymce/css/content.css",
+   languagetool_i18n_explain : {
+     "de-DE": "Mehr Informationen..."
+   },
+   languagetool_i18n_ignore_once : {
+     "de-DE": "Hier ignorieren"
+   },
+   languagetool_i18n_ignore_all : {
+     "de-DE": "Fehler dieses Typs ignorieren"
+   },
+   languagetool_i18n_rule_implementation : {
+     "de-DE": "Implementierung der Regel"
+   },
+   languagetool_i18n_current_lang :
+     function() { return document.checkform.lang.value; },
+   languagetool_rpc_url: "https://languagetool.org/api/v2/check",
+   languagetool_css_url:"https://www.languagetool.org/online-check/" +
+     "tiny_mce/plugins/atd-tinymce/css/content.css",
    theme                              : "advanced",
    theme_advanced_buttons1            : "",
    theme_advanced_buttons2            : "",
@@ -55,16 +49,18 @@
   	 gecko_spellcheck                   : false
 	});
 <!-- Fetching post text -->	
-  let superFlag1 = false
+// flags are for checklist logic. need to be on global scope
+  let grammarErrorHolder
+  let flag0 = false
   let flag1 = false
-  let superFlag2 = false
   let flag2 = false
   let flag3 = false
   let flag4 = false
+  let flag5 = false
+  let flag6 = false
+  let flag7 = false
 
 $(document).ready(function($){
-  // flags are for checklist logic
-  
   //ask to check for either url or email
   $("#urlOrEmail input[name='type']").click(function(){
     if($('input:radio[name=type]:checked').val() == "url"){
@@ -72,13 +68,13 @@ $(document).ready(function($){
       $('#checkEmail').hide();
       $('#step2').hide();
       $('#hidemenot1').show();
-      //$('#urlOrEmail').hide();
+      $('#urlOrEmail').hide();
     } else {
       $('#checkEmail').show();
       $('#step1').hide();
       $('#step2').hide();
       $('#hidemenot2').show();
-      //$('#urlOrEmail').hide();
+      $('#urlOrEmail').hide();
     }
   })
 
@@ -98,7 +94,9 @@ $(document).ready(function($){
        }
 		});
 	});
-  // check list 
+
+  // check list functions
+
   	// add items
   $('#add-todo').click(function(){
     var lastSibling = $('#todo-list > .todo-wrap:last-of-type > input').attr('id');
@@ -158,101 +156,226 @@ $(document).ready(function($){
 
   // checklist logic
 
+  $('#task0').click(function(){
+    if (!flag0){
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  })
+
   $('#task1').click(function(){
-    if (!superFlag1){
+    if (!flag1){
       event.preventDefault();
       event.stopPropagation();
-    } else {
-      flag1 = true
-    }
-    
-  })
-
-  $('#task2').click(function(event){
-    if (!flag1 || !superFlag2) {
-      event.preventDefault();
-      event.stopPropagation();
-    } else {
-      flag2 = true
-    }
-  })
-
-  $('#task3').click(function(event){
-    if (!flag1 || !flag2) {
-      //event.preventDefault();
-      event.stopPropagation();
-      alert('check other items')
-    } else {
-      flag3 = true
-    }
-  })
-
-  $('#task4').click(function(){
-    if (!flag1 || !flag2 || !flag3) {
-      event.preventDefault();
-      event.stopPropagation();
-      alert('check other items')
-    } else {
-      flag4 = true
-    }
-  })
-
-  $('#task5').click(function(){
-    if (!flag1 || !flag2 || !flag3 || !flag4) {
-      event.preventDefault();
-      event.stopPropagation();
-      alert('check other items')
     } 
   })
 
+  $('#task2').click(function(event){
+    if (!flag2 ) {
+      event.preventDefault();
+      event.stopPropagation();
+    } 
+  })
+
+  $('#task3').click(function(event){
+    if (!flag3) {
+      //event.preventDefault();
+      event.stopPropagation();
+      event.stopPropagation();
+    } 
+  })
+
+  $('#task4').click(function(event){
+    if (!flag4 ) {
+      event.preventDefault();
+      event.stopPropagation();
+    } 
+  })
+
+  $('#task5').click(function(event){
+    if (!flag5) {
+      event.preventDefault();
+      event.stopPropagation();
+    } 
+  })
+
+  $('#task6').click(function(event){
+    if (!flag6 ) {
+      event.preventDefault();
+      event.stopPropagation();
+    } 
+  })
+
+  $('#task7').click(function(event){
+    if (!flag7 ) {
+      event.preventDefault();
+      event.stopPropagation();
+    } 
+  })
 
 // Enter Key detect
 
-$.fn.enterKey = function (fnc) {
+  $.fn.enterKey = function (fnc) {
     return this.each(function () {
-        $(this).keypress(function (ev) {
-            var keycode = (ev.keyCode ? ev.keyCode : ev.which);
-            if (keycode == '13') {
-                fnc.call(this, ev);
-            }
-        })
+      $(this).keypress(function (ev) {
+        var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+        if (keycode == '13') {
+          fnc.call(this, ev);
+        }
+      })
     })
-}
-
+  }
 });
 // <!-- Running TinyMCE plugin -->	
-  function doit() {
 
-    console.log('doit')
-    var langCode = document.checkform.lang.value;
-     tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
-	   //$('#hidemenot1').hide();
-     
-     $('#fixSpacing').hide()
-     
-     $('#hidemenot1').hide()
-     // i frame scroll listener
-     $("#checktext1_ifr").ready(function () {
-        let iframeC = $("#checktext1_ifr").contents();
-        $(iframeC).scroll(function () { 
-          //your code here
-          console.log($(iframeC).scrollTop(), 'top')
-          console.log($(iframeC).height(), 'doc height')
-          console.log('hi')
-          if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
-            $('#checkCap').show()
-            $('#ignoreAll1').show()    
-          }
-        })
-      });
+  // checks for text
+  function doit() {
+    let langCode = document.checkform.lang.value;
+    tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
+    $('#hidemenot1').hide()
+    // i frame scroll listener
+
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
+      $(iframeC).scroll(function () { 
+        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+          $('#checkSpellingErrors').show()
+          $('#ignoreAll1').show() 
+        }
+      })
+    });
+  }
+
+  // check email text
+
+  function doitEmail() {
+    let langCode = document.checkform2.lang.value;
+    tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
+     //$('#hidemenot2').hide();
+    $('#ignoreAll2').show()
+    $('#fixSpacing2').show()
+  }
+
+  // checks for only spelling errors 
+
+  function checkSpellingError() {
+    $('#checkSpellingErrors').hide()
+    $('#ignoreAll1').hide() 
+    let iframe = document.getElementById('checktext1_ifr')
+    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
+    let grammarError = innerDoc.getElementsByClassName('hiddenGrammarError' )
+    grammarErrorHolder = Array.from(grammarError).slice()
+    for (let i = grammarError.length; i--; ) {
+      grammarError[i].classList.remove('hiddenGrammarError');
+    } 
+
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
+      $(iframeC).scrollTop(0)
+      $(iframeC).scroll(function () { 
+        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+          $('#finishSpellingErrors').show()
+          $('#ignoreAll1').show() 
+          $('#checkSpellingErrors').hide()
+        }
+      })
+    });
+  }
+
+  function finishSpellingError() {
+    alert('found all spelling errors!')
+    alert('please check for grammar issues')
+    flag0 = true
+    $('#task0').trigger('click')
+    $('#ignoreAll1').hide()
+    $('#finishSpellingErrors').hide()
+    $("#checktext1_ifr").ready(function () {
+      //checkCaps(1)
+      ignoreAll(1)
+      checkGrammarFunction(1)
+      let iframeC = $("#checktext1_ifr").contents();
+      $(iframeC).scrollTop(0)
+      $(iframeC).scroll(function () { 
+        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+          $('#ignoreAll1').show() 
+          $('#checkSpellingErrors').hide()
+          $('#finishSpellingErrors').hide()
+        }
+      })
+    });
+  }
+
+  // checks for grammar only
+  function checkGrammarFunction(number){
+    $('#checkGrammar').hide()
+    $('#ignoreAll1').hide()
+    let iframe = document.getElementById('checktext1_ifr')
+    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
+    for (let i = grammarErrorHolder.length; i--; ) {
+      grammarErrorHolder[i].classList.add('hiddenGrammarError');
+    }
+    $("#checktext1_ifr").ready(function () {
+      //checkCaps(1)
+      let iframeC = $("#checktext1_ifr").contents();
+      $(iframeC).scrollTop(0)
+      $(iframeC).scroll(function () { 
+        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+          $('#finishGrammar').show()
+          $('#ignoreAll1').show() 
+        }
+      })
+    });
+
+  }
+
+  function finishGrammarFunction(number){
+    $('#finishGrammar').hide()
+    $('#ignoreAll1').hide()
+    alert('found all grammar errors!')
+    alert('please check for formatting, spacing, and other bugs')
+    flag1 = true
+    $('#task1').trigger('click')
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
+      $(iframeC).scrollTop(0)
+      $(iframeC).scroll(function () { 
+        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+          $('#finishGrammar').hide()
+          $('#finishFormat').show()
+          $('#ignoreAll1').show() 
+        }
+      })
+    })
+  }
+
+  // finish format button 
+
+  function finishFormatting(){
+    $('#finishFormat').hide()
+    $('#completeCaps').hide()
+    $('#ignoreAll1').hide() 
+    alert('found all formatting issues!')
+    alert('please check for capitalization issues')
+    checkCaps(1)
+    flag2 = true
+    $('#task2').trigger('click')
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
+      $(iframeC).scrollTop(0)
+      $(iframeC).scroll(function () { 
+        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+          $('#finishFormat').hide()
+          $('#completeCaps').show()
+          $('#ignoreAll1').show() 
+        }
+      })
+    })
   }
   // checks for Capitalized words
-  function checkCaps(number) {
 
+  function checkCaps(number) {
     $('#checkCap').hide()
     $('#fixSpacing').hide()
-    $('#completeCaps').show()
-    $('#ignoreAll1').show()
     ignoreAll(number)
     let iframe = document.getElementById(`checktext${number}_ifr`)
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
@@ -263,55 +386,85 @@ $.fn.enterKey = function (fnc) {
     bodyText = bodyText.replace(/--/g, ' ')
     bodyText = bodyText.replace(/\s+(\W)/g, "$1")
     bodyText = bodyText.replace(/\./g, '. ')
+    bodyText = bodyText.replace(/\:+[a-z]+/g, ': ')
+    bodyText = bodyText.replace(/\;/g, '; ')
     let allCapWords = bodyText.match(/[A-Z]+[a-z]+/g);
     allCapWords = allCapWords.filter(function(elem, pos) {
       return allCapWords.indexOf(elem) === pos;
     });
-    //let iframeCheck = $(`#checktext${number}_ifr`).contents().find('body').find('p').text()
-    //console.log(iframeCheck, 'iframeCheck')
     for (let i = 0; i < allCapWords.length; i++ ) {
       bodyText = bodyText.replace(new RegExp(allCapWords[i], 'g'),`<span class='hiddenSpellError' onkeypress="MORFOLOGIK_RULE_EN_US---#---undefined---#---Possible spelling mistake found---#--- ---#------#---${allCapWords[i]}">${allCapWords[i]}</span>`)
-      //`<span class="hiddenSpellError">${allCapWords[i]}></span>`
-      //:contains(${allCapWords[i]})
-      //allCapWords[i].classList.add('hiddenSpellError');
     } 
-    console.log(bodyText, 'bodyText')
-    console.log(allCapWords,' check cap')
     $(tinymce.get('checktext1').getBody()).html( bodyText );
   }
+
+  // finish checking for capitalization errors.
+
   function finishCaps(){
-    superFlag1 = true
-    alert('found all capitalization errors!')
-    alert('please check for active and broken links')
-    flag1 = true
-    $('#task1').trigger('click')
     $('#completeCaps').hide()
-    $('#completeLinks').show()
-    $('ignoreAll1').hide()
-    
+    $('#ignoreAll1').hide()
+    alert('found all capitalization errors!')
+    alert('please check for broken links')
+    flag3 = true
+    $('#task3').trigger('click')
+    $('#completeLinks').show() 
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
+      $(iframeC).scrollTop(0)
+      $(iframeC).scroll(function () { 
+        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+          $('#finishFormat').hide()
+          $('#completeCaps').hide()
+          $('#ignoreAll1').hide() 
+        }
+      })
+    })
   }
+
+  // finish buttons 
   function finishLinks(){
-    superFlag2 = true
-    flag2 = true
     alert('found all link related issues')
     alert('please check for mobile and tablet versions of website')
-    $('#task2').trigger('click')
+    flag4 = true
+    $('#task4').trigger('click')
     $('#completeLinks').hide()
+    $('#finishMobileCheck').show()
   }
-  function doitEmail() {
-    var langCode = document.checkform2.lang.value;
-    tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
-     //$('#hidemenot2').hide();
-    $('#ignoreAll2').show()
-    $('#fixSpacing2').show()
+
+  function finishMobileCheckFunction(){
+    alert('checked mobile and tablet versions')
+    alert('please check for text in images')
+    flag5 = true
+    $('#task5').trigger('click')
+    $('#finishMobileCheck').hide()
+    $('#finishImageText').show()
   }
+
+  function finishImageTextFunction(){
+    alert('checked text in images ')
+    alert('please check for meta info')
+    flag6 = true
+    $('#task6').trigger('click')
+    $('#finishImageText').hide()
+    $('#finishMetaInfo').show()
+  }
+
+  function finishMetaInfoFunction(){
+    alert('checked for meta info')
+    alert('Congrats! You are finished!')
+    flag7 = true
+    $('#task7').trigger('click')
+    $('#finishMetaInfo').hide()
+  }
+
+
+  
   // ignore all button
+
   function ignoreAll(number){
     let iframe = document.getElementById(`checktext${number}_ifr`)
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
-    // console.log(innerDoc, 'innderDOc')
     let spellError = innerDoc.getElementsByClassName('hiddenSpellError')
-    //console.log(spellError, 'spellError')
     for (let i = spellError.length; i--; ) {
       spellError[i].classList.remove('hiddenSpellError');
     } 
@@ -320,17 +473,13 @@ $.fn.enterKey = function (fnc) {
       grammarError[i].classList.remove('hiddenGrammarError');
     } 
   }
-  // ignore all instance of word
-  function ignoreAllWord(word){
-    let id = 'menu_checktext1_spellcheckermenu'
-  }
+
   // fix spacing
+
   function Spacing(number){   
     let iframe = document.getElementById(`checktext${number}_ifr`)
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
-    // console.log(innerDoc, 'spacing ')
     let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
-    // console.log(bodyText, 'bodyText')
     bodyText = bodyText.replace(/,/g, ', ')
     bodyText = bodyText.replace(/"/g, '" ')
     //bodyText = bodyText.replace(/\"/g, ' " ');
@@ -357,9 +506,6 @@ $.fn.enterKey = function (fnc) {
   }
   body{
   background:#f8f8f8;
-  }
-  .highlight{
-    background-color:'yellow';
   }
   h1{
   text-align:center;
@@ -598,73 +744,101 @@ $.fn.enterKey = function (fnc) {
         <input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
         <input type="submit" id="submit1" name="Submit" value="Submit">
       </form>
-  <div id="here"></div>
-</div>
-<div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none;" id="step2">
-  <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
-  <form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
-    <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
-    <input type="submit" id="hidemenot1" name="_action_checkText"
-          value="Check Text" onclick="doit();return false;">
-    <input type="button" id="checkCap" value="Check For capitalization" style="display:none" onclick="checkCaps(1) ;return false;">
-    <input type="button" id="checkLinks" value="Check links" style="display:none" onclick="checkLinks(1) ;return false;">
-    <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false;" style="display:none"/>
-    <input id="completeCaps" type="button" value="Finished Cap Check" onclick="finishCaps(); return false;" style="display:none"/>
-    <input id="completeLinks" type="button" value="Finished Link Check" onclick="finishLinks(); return false;" style="display:none"/>
-    <input id="fixSpacing" type="button" value="Fix Spacing" onclick="Spacing(1); return false;" style="display:none"/>
-    <input type="hidden" name="lang" id="lang" value="en-US">
-  </form>
+    <div id="here"></div>
     </div>
-    <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="checkEmail">
-      <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Check Email</h1>
-      <form id="form3" name="checkform2" action="https://community.languagetool.org" method="post" style="margin:20px;">
-        <p id="checktextpara"><textarea id="checktext2" name="text" style="width:100%;height:80%;" >Paste email text here</textarea>
-        </p>
-        <input type="submit" id="hidemenot2" name="_action_checkText2"
-              value="Check Text" onclick="doitEmail();return false;">
-        <input id="ignoreAll2" type="button" value="Ignore All" onclick="ignoreAll(2); return false" style="display:none">
-        <input id="fixSpacing2" type="button" value="Fix Spacing" onclick="Spacing(2); return false;" style="display:none"/>
-        <input type="hidden" name="lang" id="lang" value="en-US">
-      </form>
-    </div>
+  </div>
+  <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none;" id="step2">
+    <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
+    <form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
+      <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
+      <input type="submit" id="hidemenot1" name="_action_checkText"
+            value="Check Text" onclick="doit();return false;">
+      <input type="button" id="checkSpellingErrors" value="Check For Spelling" style="display:none" onclick="checkSpellingError();return false;">
+      <input type="button" id="finishSpellingErrors" value="Finish Spell Check" style="display:none" onclick="finishSpellingError();return false;">
+      <input type="button" id="checkGrammar" value="Check Grammar" style="display:none" onclick="checkGrammarFunction();return false;">
+      <input type="button" id="finishGrammar" value="Finish Grammar Check" style="display:none" onclick="finishGrammarFunction();return false;">
+      <input type="button" id="finishFormat" value="Finish Format" style="display:none" onclick="finishFormatting();return false;">
+      <input type="button" id="checkCap" value="Check For Capitalization" style="display:none" onclick="checkCaps(1) ;return false;">
+      <input type="button" id="checkLinks" value="Check Links" style="display:none" onclick="checkLinks(1) ;return false;">
+      <input id="completeCaps" type="button" value="Finished Cap Check" onclick="finishCaps(); return false;" style="display:none"/>
+      <input id="completeLinks" type="button" value="Finished Link Check" onclick="finishLinks(); return false;" style="display:none"/>
+      <input id="finishMobileCheck" type="button" value="finish Mobile/Tablet Check" onclick="finishMobileCheckFunction(); return false;" style="display:none"/>
+      <input id="finishImageText" type="button" value="Finished Image Text" onclick="finishImageTextFunction(); return false;" style="display:none"/>
+      <input id="finishMetaInfo" type="button" value="Finished Meta Info" onclick="finishMetaInfoFunction(); return false;" style="display:none"/>
+      <input id="fixSpacing" type="button" value="Fix Spacing" onclick="Spacing(1); return false;" style="display:none"/>
+      <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false;" style="display:none"/>
+      <input type="hidden" name="lang" id="lang" value="en-US">
+    </form>
+  </div>
+  <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="checkEmail">
+    <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Check Email</h1>
+    <form id="form3" name="checkform2" action="https://community.languagetool.org" method="post" style="margin:20px;">
+      <p id="checktextpara"><textarea id="checktext2" name="text" style="width:100%;height:80%;" >Paste email text here</textarea>
+      </p>
+      <input type="submit" id="hidemenot2" name="_action_checkText2"
+            value="Check Text" onclick="doitEmail();return false;">
+      <input id="ignoreAll2" type="button" value="Ignore All" onclick="ignoreAll(2); return false" style="display:none">
+      <input id="fixSpacing2" type="button" value="Fix Spacing" onclick="Spacing(2); return false;" style="display:none"/>
+      <input type="hidden" name="lang" id="lang" value="en-US">
+    </form>
   </div>
   <!-- checklist html -->
   <div id="checkList" style="flex:1">
-    <h1><i class="fa fa-check"></i>Checklist</h1>
+    <h1><i class="fa fa-check"></i>Checklist Progress</h1>
     <form id="todo-list">
+    <span class="todo-wrap">
+        <input type="checkbox" id="0" />
+        <label for="0" class="todo" id="task0">
+          <i class="fa fa-check"></i>
+          Check spelling issues 
+        </label>
+      </span>
       <span class="todo-wrap">
         <input type="checkbox" id="1" />
         <label for="1" class="todo" id="task1">
           <i class="fa fa-check"></i>
-          check capitalization 
+          Check grammar issues
         </label>
       </span>
       <span class="todo-wrap">
         <input type="checkbox" id="2"/>
         <label for="2" class="todo" id="task2">
           <i class="fa fa-check"></i>
-           check links <a style="color: blue; font-size: 14, font-weight: Helvetica" href="https://validator.w3.org/checklink" target="_blank">check here</a>
+           Check formatting, spacing, and other bugs
         </label>
       </span>
       <span class="todo-wrap">
         <input type="checkbox" id="3"/>
         <label for="3" class="todo" id="task3">
           <i class="fa fa-check"></i>
-          check mobile and tablet versions <a style="color: blue; font-size: 14, font-weight: Helvetica" href="http://mobiletest.me/" target="_blank"> check here</a>
+          Check Capitalization
         </label>
       </span>
     	<span class="todo-wrap">
         <input type="checkbox" id="4" />
         <label for="4" class="todo" id="task4">
           <i class="fa fa-check"></i>
-           check the text in images 
+           Check Links <a style="color: blue; font-size: 14, font-weight: Helvetica" href="https://validator.w3.org/checklink" target="_blank">check here</a>
         </label>
       </span>
       <span class="todo-wrap">
         <input type="checkbox" id="5" />
         <label for="5" class="todo" id="task5">
           <i class="fa fa-check"></i>
-           check everything else all together 
+           Check Mobile and Tablet Versions <a style="color: blue; font-size: 14, font-weight: Helvetica" href="http://mobiletest.me/" target="_blank"> check here</a>
+        </label>
+      </span>
+      <span class="todo-wrap">
+        <input type="checkbox" id="6" />
+        <label for="6" class="todo" id="task6">
+          <i class="fa fa-check"></i>
+           Check the text in images  
+        </label>
+      </span><span class="todo-wrap">
+        <input type="checkbox" id="7" />
+        <label for="7" class="todo" id="task7">
+          <i class="fa fa-check"></i>
+           Check meta info 
         </label>
       </span>
       <div id="add-todo">
