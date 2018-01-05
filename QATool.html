@@ -50,8 +50,8 @@
 	});
 <!-- Fetching post text -->	
 // flags are for checklist logic. need to be on global scope
-  let grammarErrorHolder
-  let flag0 = false
+  //let grammarErrorHolder
+  //let flag0 = false
   let flag1 = false
   let flag2 = false
   let flag3 = false
@@ -156,12 +156,12 @@ $(document).ready(function($){
 
   // checklist logic
 
-  $('#task0').click(function(){
-    if (!flag0){
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  })
+  // $('#task0').click(function(){
+  //   if (!flag0){
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //   }
+  // })
 
   $('#task1').click(function(){
     if (!flag1){
@@ -230,7 +230,7 @@ $(document).ready(function($){
   // checks for text
   function doit() {
     let langCode = document.checkform.lang.value;
-    tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
+    tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode)
     $('#hidemenot1').hide()
     // i frame scroll listener
 
@@ -238,7 +238,7 @@ $(document).ready(function($){
       let iframeC = $("#checktext1_ifr").contents();
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
-          $('#checkSpellingErrors').show()
+          $('#finishSpellGrammar').show()
           $('#ignoreAll1').show() 
         }
       })
@@ -247,90 +247,91 @@ $(document).ready(function($){
 
   // check email text
 
-  function doitEmail() {
-    let langCode = document.checkform2.lang.value;
-    tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
-     //$('#hidemenot2').hide();
-    $('#ignoreAll2').show()
-    $('#fixSpacing2').show()
-  }
+  // function doitEmail() {
+  //   let langCode = document.checkform2.lang.value;
+  //   tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode);
+    
+  //    //$('#hidemenot2').hide();
+  //   $('#ignoreAll2').show()
+  //   $('#fixSpacing2').show()
+  // }
 
   // checks for only spelling errors 
 
-  function checkSpellingError() {
-    $('#checkSpellingErrors').hide()
-    $('#ignoreAll1').hide() 
-    let iframe = document.getElementById('checktext1_ifr')
-    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
-    let grammarError = innerDoc.getElementsByClassName('hiddenGrammarError' )
-    grammarErrorHolder = Array.from(grammarError).slice()
-    for (let i = grammarError.length; i--; ) {
-      grammarError[i].classList.remove('hiddenGrammarError');
-    } 
+  // function checkSpellingError() {
+  //   $('#checkSpellingErrors').hide()
+  //   $('#ignoreAll1').hide() 
+  //   let iframe = document.getElementById('checktext1_ifr')
+  //   let innerDoc = iframe.contentDocument || iframe.contentWindow.document
+  //   let grammarError = innerDoc.getElementsByClassName('hiddenGrammarError' )
+  //   grammarErrorHolder = Array.from(grammarError).slice()
+  //   for (let i = grammarError.length; i--; ) {
+  //     grammarError[i].classList.remove('hiddenGrammarError');
+  //   } 
 
-    $("#checktext1_ifr").ready(function () {
-      let iframeC = $("#checktext1_ifr").contents();
-      $(iframeC).scrollTop(0)
-      $(iframeC).scroll(function () { 
-        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
-          $('#finishSpellingErrors').show()
-          $('#ignoreAll1').show() 
-          $('#checkSpellingErrors').hide()
-        }
-      })
-    });
-  }
+  //   $("#checktext1_ifr").ready(function () {
+  //     let iframeC = $("#checktext1_ifr").contents();
+  //     $(iframeC).scrollTop(0)
+  //     $(iframeC).scroll(function () { 
+  //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+  //         $('#finishSpellingErrors').show()
+  //         $('#ignoreAll1').show() 
+  //         $('#checkSpellingErrors').hide()
+  //       }
+  //     })
+  //   });
+  // }
 
-  function finishSpellingError() {
-    alert('found all spelling errors!')
-    alert('please check for grammar issues')
-    flag0 = true
-    $('#task0').trigger('click')
-    $('#ignoreAll1').hide()
-    $('#finishSpellingErrors').hide()
-    $("#checktext1_ifr").ready(function () {
-      //checkCaps(1)
-      ignoreAll(1)
-      checkGrammarFunction(1)
-      let iframeC = $("#checktext1_ifr").contents();
-      $(iframeC).scrollTop(0)
-      $(iframeC).scroll(function () { 
-        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
-          $('#ignoreAll1').show() 
-          $('#checkSpellingErrors').hide()
-          $('#finishSpellingErrors').hide()
-        }
-      })
-    });
-  }
+  // function finishSpellingError() {
+  //   alert('found all spelling errors!')
+  //   alert('please check for grammar issues')
+  //   flag0 = true
+  //   $('#task0').trigger('click')
+  //   $('#ignoreAll1').hide()
+  //   $('#finishSpellingErrors').hide()
+  //   $("#checktext1_ifr").ready(function () {
+  //     //checkCaps(1)
+  //     ignoreAll(1)
+  //     checkGrammarFunction(1)
+  //     let iframeC = $("#checktext1_ifr").contents();
+  //     $(iframeC).scrollTop(0)
+  //     $(iframeC).scroll(function () { 
+  //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+  //         $('#ignoreAll1').show() 
+  //         $('#checkSpellingErrors').hide()
+  //         $('#finishSpellingErrors').hide()
+  //       }
+  //     })
+  //   });
+  // }
 
   // checks for grammar only
-  function checkGrammarFunction(number){
-    $('#checkGrammar').hide()
-    $('#ignoreAll1').hide()
-    let iframe = document.getElementById('checktext1_ifr')
-    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
-    for (let i = grammarErrorHolder.length; i--; ) {
-      grammarErrorHolder[i].classList.add('hiddenGrammarError');
-    }
-    $("#checktext1_ifr").ready(function () {
-      //checkCaps(1)
-      let iframeC = $("#checktext1_ifr").contents();
-      $(iframeC).scrollTop(0)
-      $(iframeC).scroll(function () { 
-        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
-          $('#finishGrammar').show()
-          $('#ignoreAll1').show() 
-        }
-      })
-    });
+  // function checkGrammarFunction(number){
+  //   $('#checkGrammar').hide()
+  //   $('#ignoreAll1').hide()
+  //   let iframe = document.getElementById('checktext1_ifr')
+  //   let innerDoc = iframe.contentDocument || iframe.contentWindow.document
+  //   for (let i = grammarErrorHolder.length; i--; ) {
+  //     grammarErrorHolder[i].classList.add('hiddenGrammarError');
+  //   }
+  //   $("#checktext1_ifr").ready(function () {
+  //     //checkCaps(1)
+  //     let iframeC = $("#checktext1_ifr").contents();
+  //     $(iframeC).scrollTop(0)
+  //     $(iframeC).scroll(function () { 
+  //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+  //         $('#finishGrammar').show()
+  //         $('#ignoreAll1').show() 
+  //       }
+  //     })
+  //   });
 
-  }
+  // }
 
-  function finishGrammarFunction(number){
-    $('#finishGrammar').hide()
+  function finishSpellGrammarFunction(number){
+    $('#finishSpellGrammar').hide()
     $('#ignoreAll1').hide()
-    alert('found all grammar errors!')
+    alert('found all spelling and grammar errors!')
     alert('please check for formatting, spacing, and other bugs')
     flag1 = true
     $('#task1').trigger('click')
@@ -339,7 +340,7 @@ $(document).ready(function($){
       $(iframeC).scrollTop(0)
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
-          $('#finishGrammar').hide()
+          $('#finishSpellGrammar').hide()
           $('#finishFormat').show()
           $('#ignoreAll1').show() 
         }
@@ -731,14 +732,14 @@ $(document).ready(function($){
 <body style="display:flex">
 <!-- spell check html -->
   <div id='checkTextDiv' style="flex:2">
-    <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:2px"  id="urlOrEmail">
+    <!-- <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:2px"  id="urlOrEmail">
       <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">Check for URL or Email?</h1>
       <form action="">
         <input type="radio" name="type" value="url"> url<br>
         <input type="radio" name="type" value="email"> email<br>
       </form>
-    </div>
-    <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px;display:none" id="step1">
+    </div> -->
+    <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px" id="step1">
     	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Fetching the text</h1>
     	<form action="" id="form1" method="post" style="margin:20px;">
         <input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
@@ -754,10 +755,10 @@ $(document).ready(function($){
       <input type="submit" id="hidemenot1" name="_action_checkText"
             value="Check Text" onclick="doit();return false;">
       <input type="button" id="checkSpellingErrors" value="Check For Spelling" style="display:none" onclick="checkSpellingError();return false;">
-      <input type="button" id="finishSpellingErrors" value="Finish Spell Check" style="display:none" onclick="finishSpellingError();return false;">
+      <input type="button" id="finishSpellGrammar" value="Finish Spell and Grammar Check" style="display:none" onclick="finishSpellGrammarFunction();return false;">
       <input type="button" id="checkGrammar" value="Check Grammar" style="display:none" onclick="checkGrammarFunction();return false;">
       <input type="button" id="finishGrammar" value="Finish Grammar Check" style="display:none" onclick="finishGrammarFunction();return false;">
-      <input type="button" id="finishFormat" value="Finish Format" style="display:none" onclick="finishFormatting();return false;">
+      <input type="button" id="finishFormat" value="Finish Formatting" style="display:none" onclick="finishFormatting();return false;">
       <input type="button" id="checkCap" value="Check For Capitalization" style="display:none" onclick="checkCaps(1) ;return false;">
       <input type="button" id="checkLinks" value="Check Links" style="display:none" onclick="checkLinks(1) ;return false;">
       <input id="completeCaps" type="button" value="Finished Cap Check" onclick="finishCaps(); return false;" style="display:none"/>
@@ -770,7 +771,7 @@ $(document).ready(function($){
       <input type="hidden" name="lang" id="lang" value="en-US">
     </form>
   </div>
-  <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="checkEmail">
+  <!-- <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="checkEmail">
     <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Check Email</h1>
     <form id="form3" name="checkform2" action="https://community.languagetool.org" method="post" style="margin:20px;">
       <p id="checktextpara"><textarea id="checktext2" name="text" style="width:100%;height:80%;" >Paste email text here</textarea>
@@ -781,23 +782,16 @@ $(document).ready(function($){
       <input id="fixSpacing2" type="button" value="Fix Spacing" onclick="Spacing(2); return false;" style="display:none"/>
       <input type="hidden" name="lang" id="lang" value="en-US">
     </form>
-  </div>
+  </div> -->
   <!-- checklist html -->
   <div id="checkList" style="flex:1">
     <h1><i class="fa fa-check"></i>Checklist Progress</h1>
     <form id="todo-list">
-    <span class="todo-wrap">
-        <input type="checkbox" id="0" />
-        <label for="0" class="todo" id="task0">
-          <i class="fa fa-check"></i>
-          Check spelling issues 
-        </label>
-      </span>
       <span class="todo-wrap">
         <input type="checkbox" id="1" />
         <label for="1" class="todo" id="task1">
           <i class="fa fa-check"></i>
-          Check grammar issues
+          Check spelling and grammar issues
         </label>
       </span>
       <span class="todo-wrap">
