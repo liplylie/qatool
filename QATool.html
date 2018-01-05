@@ -179,8 +179,7 @@ $(document).ready(function($){
 
   $('#task3').click(function(event){
     if (!flag3) {
-      //event.preventDefault();
-      event.stopPropagation();
+      event.preventDefault();
       event.stopPropagation();
     } 
   })
@@ -392,6 +391,7 @@ $(document).ready(function($){
     allCapWords = allCapWords.filter(function(elem, pos) {
       return allCapWords.indexOf(elem) === pos;
     });
+    //console.log(allCapWords, 'all')
     for (let i = 0; i < allCapWords.length; i++ ) {
       bodyText = bodyText.replace(new RegExp(allCapWords[i], 'g'),`<span class='hiddenSpellError' onkeypress="MORFOLOGIK_RULE_EN_US---#---undefined---#---Possible spelling mistake found---#--- ---#------#---${allCapWords[i]}">${allCapWords[i]}</span>`)
     } 
