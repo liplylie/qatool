@@ -10,6 +10,7 @@
  tinyMCE.init({
    mode : "textareas",
    plugins : "AtD,paste",
+   selector: "textarea",
    paste_text_sticky : true,
    setup : function(ed) {
   	 ed.onInit.add(function(ed) {
@@ -62,21 +63,21 @@
 
 $(document).ready(function($){
   //ask to check for either url or email
-  $("#urlOrEmail input[name='type']").click(function(){
-    if($('input:radio[name=type]:checked').val() == "url"){
-      $('#step1').show();
-      $('#checkEmail').hide();
-      $('#step2').hide();
-      $('#hidemenot1').show();
-      $('#urlOrEmail').hide();
-    } else {
-      $('#checkEmail').show();
-      $('#step1').hide();
-      $('#step2').hide();
-      $('#hidemenot2').show();
-      $('#urlOrEmail').hide();
-    }
-  })
+  // $("#urlOrEmail input[name='type']").click(function(){
+  //   if($('input:radio[name=type]:checked').val() == "url"){
+  //     $('#step1').show();
+  //     $('#checkEmail').hide();
+  //     $('#step2').hide();
+  //     $('#hidemenot1').show();
+  //     $('#urlOrEmail').hide();
+  //   } else {
+  //     $('#checkEmail').show();
+  //     $('#step1').hide();
+  //     $('#step2').hide();
+  //     $('#hidemenot2').show();
+  //     $('#urlOrEmail').hide();
+  //   }
+  // })
 
 	$('#form1').on('submit',function(event){
 		event.preventDefault();
@@ -87,7 +88,7 @@ $(document).ready(function($){
 		    success: function(res) {
 			  $('#step1').hide();
 			  $('#step2').show();
-			  $(tinymce.get('checktext1').getBody()).html( res );
+			  $(tinymce.get('checktext').getBody()).html( res )
 			 },
        error: function(err) {
         console.log(err)
@@ -234,12 +235,12 @@ $(document).ready(function($){
     $('#hidemenot1').hide()
     // i frame scroll listener
 
-    $("#checktext1_ifr").ready(function () {
-      let iframeC = $("#checktext1_ifr").contents();
+    $("#checktext_ifr").ready(function () {
+      let iframeC = $("#checktext_ifr").contents();
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
           $('#finishSpellGrammar').show()
-          $('#ignoreAll1').show() 
+          $('#ignoreAll1').hide() 
         }
       })
     });
@@ -261,7 +262,7 @@ $(document).ready(function($){
   // function checkSpellingError() {
   //   $('#checkSpellingErrors').hide()
   //   $('#ignoreAll1').hide() 
-  //   let iframe = document.getElementById('checktext1_ifr')
+  //   let iframe = document.getElementById('checktext_ifr')
   //   let innerDoc = iframe.contentDocument || iframe.contentWindow.document
   //   let grammarError = innerDoc.getElementsByClassName('hiddenGrammarError' )
   //   grammarErrorHolder = Array.from(grammarError).slice()
@@ -269,8 +270,8 @@ $(document).ready(function($){
   //     grammarError[i].classList.remove('hiddenGrammarError');
   //   } 
 
-  //   $("#checktext1_ifr").ready(function () {
-  //     let iframeC = $("#checktext1_ifr").contents();
+  //   $("#checktext_ifr").ready(function () {
+  //     let iframeC = $("#checktext_ifr").contents();
   //     $(iframeC).scrollTop(0)
   //     $(iframeC).scroll(function () { 
   //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -289,11 +290,11 @@ $(document).ready(function($){
   //   $('#task0').trigger('click')
   //   $('#ignoreAll1').hide()
   //   $('#finishSpellingErrors').hide()
-  //   $("#checktext1_ifr").ready(function () {
+  //   $("#checktext_ifr").ready(function () {
   //     //checkCaps(1)
   //     ignoreAll(1)
   //     checkGrammarFunction(1)
-  //     let iframeC = $("#checktext1_ifr").contents();
+  //     let iframeC = $("#checktext_ifr").contents();
   //     $(iframeC).scrollTop(0)
   //     $(iframeC).scroll(function () { 
   //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -309,14 +310,14 @@ $(document).ready(function($){
   // function checkGrammarFunction(number){
   //   $('#checkGrammar').hide()
   //   $('#ignoreAll1').hide()
-  //   let iframe = document.getElementById('checktext1_ifr')
+  //   let iframe = document.getElementById('checktext_ifr')
   //   let innerDoc = iframe.contentDocument || iframe.contentWindow.document
   //   for (let i = grammarErrorHolder.length; i--; ) {
   //     grammarErrorHolder[i].classList.add('hiddenGrammarError');
   //   }
-  //   $("#checktext1_ifr").ready(function () {
+  //   $("#checktext_ifr").ready(function () {
   //     //checkCaps(1)
-  //     let iframeC = $("#checktext1_ifr").contents();
+  //     let iframeC = $("#checktext_ifr").contents();
   //     $(iframeC).scrollTop(0)
   //     $(iframeC).scroll(function () { 
   //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -335,14 +336,14 @@ $(document).ready(function($){
     alert('please check for formatting, spacing, and other bugs')
     flag1 = true
     $('#task1').trigger('click')
-    $("#checktext1_ifr").ready(function () {
-      let iframeC = $("#checktext1_ifr").contents();
+    $("#checktext_ifr").ready(function () {
+      let iframeC = $("#checktext_ifr").contents();
       $(iframeC).scrollTop(0)
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
           $('#finishSpellGrammar').hide()
           $('#finishFormat').show()
-          $('#ignoreAll1').show() 
+          $('#ignoreAll1').hide() 
         }
       })
     })
@@ -356,48 +357,48 @@ $(document).ready(function($){
     $('#ignoreAll1').hide() 
     alert('found all formatting issues!')
     alert('please check for capitalization issues')
-    checkCaps(1)
+    //checkCaps(1)
     flag2 = true
     $('#task2').trigger('click')
-    $("#checktext1_ifr").ready(function () {
-      let iframeC = $("#checktext1_ifr").contents();
+    $("#checktext_ifr").ready(function () {
+      let iframeC = $("#checktext_ifr").contents();
       $(iframeC).scrollTop(0)
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
           $('#finishFormat').hide()
           $('#completeCaps').show()
-          $('#ignoreAll1').show() 
+          $('#ignoreAll1').hide() 
         }
       })
     })
   }
   // checks for Capitalized words
 
-  function checkCaps(number) {
-    $('#checkCap').hide()
-    $('#fixSpacing').hide()
-    ignoreAll(number)
-    let iframe = document.getElementById(`checktext${number}_ifr`)
-    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
-    let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
-    bodyText = bodyText.replace(/,/g, ', ')
-    bodyText = bodyText.replace(/"/g, '" ')
-    bodyText = bodyText.replace(/\?/g, '? ')
-    bodyText = bodyText.replace(/--/g, ' ')
-    bodyText = bodyText.replace(/\s+(\W)/g, "$1")
-    bodyText = bodyText.replace(/\./g, '. ')
-    bodyText = bodyText.replace(/\:+[a-z]+/g, ': ')
-    bodyText = bodyText.replace(/\;/g, '; ')
-    let allCapWords = bodyText.match(/[A-Z]+[a-z]+/g);
-    allCapWords = allCapWords.filter(function(elem, pos) {
-      return allCapWords.indexOf(elem) === pos;
-    });
-    //console.log(allCapWords, 'all')
-    for (let i = 0; i < allCapWords.length; i++ ) {
-      bodyText = bodyText.replace(new RegExp(allCapWords[i], 'g'),`<span class='hiddenSpellError' onkeypress="MORFOLOGIK_RULE_EN_US---#---undefined---#---Possible spelling mistake found---#--- ---#------#---${allCapWords[i]}">${allCapWords[i]}</span>`)
-    } 
-    $(tinymce.get('checktext1').getBody()).html( bodyText );
-  }
+  // function checkCaps(number) {
+  //   $('#checkCap').hide()
+  //   $('#fixSpacing').hide()
+  //   // ignoreAll(number)
+  //   let iframe = document.getElementById("checktext_ifr")
+  //   let innerDoc = iframe.contentDocument
+  //   let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
+  //   bodyText = bodyText.replace(/,/g, ', ')
+  //   bodyText = bodyText.replace(/"/g, '" ')
+  //   bodyText = bodyText.replace(/\?/g, '? ')
+  //   bodyText = bodyText.replace(/--/g, ' ')
+  //   bodyText = bodyText.replace(/\s+(\W)/g, "$1")
+  //   bodyText = bodyText.replace(/\./g, '. ')
+  //   bodyText = bodyText.replace(/\:+[a-z]+/g, ': ')
+  //   bodyText = bodyText.replace(/\;/g, '; ')
+  //   let allCapWords = bodyText.match(/[A-Z]+[a-z]+/g);
+  //   allCapWords = allCapWords.filter(function(elem, pos) {
+  //     return allCapWords.indexOf(elem) === pos;
+  //   });
+  //   //console.log(allCapWords, 'all')
+  //   for (let i = 0; i < allCapWords.length; i++ ) {
+  //     bodyText = bodyText.replace(new RegExp(allCapWords[i], 'g'),`<span class='hiddenSpellError' onkeypress="MORFOLOGIK_RULE_EN_US---#---undefined---#---Possible spelling mistake found---#--- ---#------#---${i}">${allCapWords[i]}</span>`)
+  //   } 
+  //   $(tinymce.get('checktext').getBody()).html( bodyText );
+  // }
 
   // finish checking for capitalization errors.
 
@@ -409,8 +410,8 @@ $(document).ready(function($){
     flag3 = true
     $('#task3').trigger('click')
     $('#completeLinks').show() 
-    $("#checktext1_ifr").ready(function () {
-      let iframeC = $("#checktext1_ifr").contents();
+    $("#checktext_ifr").ready(function () {
+      let iframeC = $("#checktext_ifr").contents();
       $(iframeC).scrollTop(0)
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -463,7 +464,7 @@ $(document).ready(function($){
   // ignore all button
 
   function ignoreAll(number){
-    let iframe = document.getElementById(`checktext${number}_ifr`)
+    let iframe = document.getElementById("checktext")
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
     let spellError = innerDoc.getElementsByClassName('hiddenSpellError')
     for (let i = spellError.length; i--; ) {
@@ -478,7 +479,7 @@ $(document).ready(function($){
   // fix spacing
 
   function Spacing(number){   
-    let iframe = document.getElementById(`checktext${number}_ifr`)
+    let iframe = document.getElementById("checktext")
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
     let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
     bodyText = bodyText.replace(/,/g, ', ')
@@ -505,8 +506,11 @@ $(document).ready(function($){
   box-sizing:border-box;
   margin:0;
   }
-  body{
+  /*body{
   background:#f8f8f8;
+  }*/
+  .highlight{
+    background-color:yellow;
   }
   h1{
   text-align:center;
@@ -739,37 +743,37 @@ $(document).ready(function($){
         <input type="radio" name="type" value="email"> email<br>
       </form>
     </div> -->
-    <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px" id="step1">
-    	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Fetching the text</h1>
-    	<form action="" id="form1" method="post" style="margin:20px;">
-        <input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
-        <input type="submit" id="submit1" name="Submit" value="Submit">
+      <div style="width:600px;margin:40px auto;text-align:center;border:2px solid #00539D;padding:0px" id="step1">
+      	<h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Fetching the text</h1>
+      	<form action="" id="form1" method="post" style="margin:20px;">
+          <input type="text" name="url" placeholder="Paste URL of blog post here" required style="text-align:left;width:450px;">
+          <input type="submit" id="submit1" name="Submit" value="Submit">
+        </form>
+      <div id="here"></div>
+      </div>
+    <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none;" id="step2">
+      <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
+      <form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
+        <p id="checktextpara"><textarea id="checktext" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
+        <input type="submit" id="hidemenot1" name="_action_checkText"
+              value="Check Text" onclick="doit();return false;">
+        <input type="button" id="checkSpellingErrors" value="Check For Spelling" style="display:none" onclick="checkSpellingError();return false;">
+        <input type="button" id="finishSpellGrammar" value="Finish Spell and Grammar Check" style="display:none" onclick="finishSpellGrammarFunction();return false;">
+        <input type="button" id="checkGrammar" value="Check Grammar" style="display:none" onclick="checkGrammarFunction();return false;">
+        <input type="button" id="finishGrammar" value="Finish Grammar Check" style="display:none" onclick="finishGrammarFunction();return false;">
+        <input type="button" id="finishFormat" value="Finish Formatting" style="display:none" onclick="finishFormatting();return false;">
+        <input type="button" id="checkCap" value="Check For Capitalization" style="display:none" onclick="checkCaps(1) ;return false;">
+        <input type="button" id="checkLinks" value="Check Links" style="display:none" onclick="checkLinks(1) ;return false;">
+        <input id="completeCaps" type="button" value="Finished Cap Check" onclick="finishCaps(); return false;" style="display:none"/>
+        <input id="completeLinks" type="button" value="Finished Link Check" onclick="finishLinks(); return false;" style="display:none"/>
+        <input id="finishMobileCheck" type="button" value="finish Mobile/Tablet Check" onclick="finishMobileCheckFunction(); return false;" style="display:none"/>
+        <input id="finishImageText" type="button" value="Finished Image Text" onclick="finishImageTextFunction(); return false;" style="display:none"/>
+        <input id="finishMetaInfo" type="button" value="Finished Meta Info" onclick="finishMetaInfoFunction(); return false;" style="display:none"/>
+        <input id="fixSpacing" type="button" value="Fix Spacing" onclick="Spacing(1); return false;" style="display:none"/>
+        <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false;" style="display:none"/>
+        <input type="hidden" name="lang" id="lang" value="en-US">
       </form>
-    <div id="here"></div>
     </div>
-  </div>
-  <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none;" id="step2">
-    <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
-    <form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
-      <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
-      <input type="submit" id="hidemenot1" name="_action_checkText"
-            value="Check Text" onclick="doit();return false;">
-      <input type="button" id="checkSpellingErrors" value="Check For Spelling" style="display:none" onclick="checkSpellingError();return false;">
-      <input type="button" id="finishSpellGrammar" value="Finish Spell and Grammar Check" style="display:none" onclick="finishSpellGrammarFunction();return false;">
-      <input type="button" id="checkGrammar" value="Check Grammar" style="display:none" onclick="checkGrammarFunction();return false;">
-      <input type="button" id="finishGrammar" value="Finish Grammar Check" style="display:none" onclick="finishGrammarFunction();return false;">
-      <input type="button" id="finishFormat" value="Finish Formatting" style="display:none" onclick="finishFormatting();return false;">
-      <input type="button" id="checkCap" value="Check For Capitalization" style="display:none" onclick="checkCaps(1) ;return false;">
-      <input type="button" id="checkLinks" value="Check Links" style="display:none" onclick="checkLinks(1) ;return false;">
-      <input id="completeCaps" type="button" value="Finished Cap Check" onclick="finishCaps(); return false;" style="display:none"/>
-      <input id="completeLinks" type="button" value="Finished Link Check" onclick="finishLinks(); return false;" style="display:none"/>
-      <input id="finishMobileCheck" type="button" value="finish Mobile/Tablet Check" onclick="finishMobileCheckFunction(); return false;" style="display:none"/>
-      <input id="finishImageText" type="button" value="Finished Image Text" onclick="finishImageTextFunction(); return false;" style="display:none"/>
-      <input id="finishMetaInfo" type="button" value="Finished Meta Info" onclick="finishMetaInfoFunction(); return false;" style="display:none"/>
-      <input id="fixSpacing" type="button" value="Fix Spacing" onclick="Spacing(1); return false;" style="display:none"/>
-      <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false;" style="display:none"/>
-      <input type="hidden" name="lang" id="lang" value="en-US">
-    </form>
   </div>
   <!-- <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none" id="checkEmail">
     <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">1. Check Email</h1>
