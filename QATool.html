@@ -63,21 +63,21 @@
 
 $(document).ready(function($){
   //ask to check for either url or email
-  // $("#urlOrEmail input[name='type']").click(function(){
-  //   if($('input:radio[name=type]:checked').val() == "url"){
-  //     $('#step1').show();
-  //     $('#checkEmail').hide();
-  //     $('#step2').hide();
-  //     $('#hidemenot1').show();
-  //     $('#urlOrEmail').hide();
-  //   } else {
-  //     $('#checkEmail').show();
-  //     $('#step1').hide();
-  //     $('#step2').hide();
-  //     $('#hidemenot2').show();
-  //     $('#urlOrEmail').hide();
-  //   }
-  // })
+  $("#urlOrEmail input[name='type']").click(function(){
+    if($('input:radio[name=type]:checked').val() == "url"){
+      $('#step1').show();
+      $('#checkEmail').hide();
+      $('#step2').hide();
+      $('#hidemenot1').show();
+      $('#urlOrEmail').hide();
+    } else {
+      $('#checkEmail').show();
+      $('#step1').hide();
+      $('#step2').hide();
+      $('#hidemenot2').show();
+      $('#urlOrEmail').hide();
+    }
+  })
 
 	$('#form1').on('submit',function(event){
 		event.preventDefault();
@@ -88,7 +88,7 @@ $(document).ready(function($){
 		    success: function(res) {
 			  $('#step1').hide();
 			  $('#step2').show();
-			  $(tinymce.get('checktext').getBody()).html( res )
+			  $(tinymce.get('checktext1').getBody()).html( res );
 			 },
        error: function(err) {
         console.log(err)
@@ -235,8 +235,8 @@ $(document).ready(function($){
     $('#hidemenot1').hide()
     // i frame scroll listener
 
-    $("#checktext_ifr").ready(function () {
-      let iframeC = $("#checktext_ifr").contents();
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
           $('#finishSpellGrammar').show()
@@ -262,7 +262,7 @@ $(document).ready(function($){
   // function checkSpellingError() {
   //   $('#checkSpellingErrors').hide()
   //   $('#ignoreAll1').hide() 
-  //   let iframe = document.getElementById('checktext_ifr')
+  //   let iframe = document.getElementById('checktext1_ifr')
   //   let innerDoc = iframe.contentDocument || iframe.contentWindow.document
   //   let grammarError = innerDoc.getElementsByClassName('hiddenGrammarError' )
   //   grammarErrorHolder = Array.from(grammarError).slice()
@@ -270,8 +270,8 @@ $(document).ready(function($){
   //     grammarError[i].classList.remove('hiddenGrammarError');
   //   } 
 
-  //   $("#checktext_ifr").ready(function () {
-  //     let iframeC = $("#checktext_ifr").contents();
+  //   $("#checktext1_ifr").ready(function () {
+  //     let iframeC = $("#checktext1_ifr").contents();
   //     $(iframeC).scrollTop(0)
   //     $(iframeC).scroll(function () { 
   //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -290,11 +290,11 @@ $(document).ready(function($){
   //   $('#task0').trigger('click')
   //   $('#ignoreAll1').hide()
   //   $('#finishSpellingErrors').hide()
-  //   $("#checktext_ifr").ready(function () {
+  //   $("#checktext1_ifr").ready(function () {
   //     //checkCaps(1)
   //     ignoreAll(1)
   //     checkGrammarFunction(1)
-  //     let iframeC = $("#checktext_ifr").contents();
+  //     let iframeC = $("#checktext1_ifr").contents();
   //     $(iframeC).scrollTop(0)
   //     $(iframeC).scroll(function () { 
   //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -310,14 +310,14 @@ $(document).ready(function($){
   // function checkGrammarFunction(number){
   //   $('#checkGrammar').hide()
   //   $('#ignoreAll1').hide()
-  //   let iframe = document.getElementById('checktext_ifr')
+  //   let iframe = document.getElementById('checktext1_ifr')
   //   let innerDoc = iframe.contentDocument || iframe.contentWindow.document
   //   for (let i = grammarErrorHolder.length; i--; ) {
   //     grammarErrorHolder[i].classList.add('hiddenGrammarError');
   //   }
-  //   $("#checktext_ifr").ready(function () {
+  //   $("#checktext1_ifr").ready(function () {
   //     //checkCaps(1)
-  //     let iframeC = $("#checktext_ifr").contents();
+  //     let iframeC = $("#checktext1_ifr").contents();
   //     $(iframeC).scrollTop(0)
   //     $(iframeC).scroll(function () { 
   //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -336,8 +336,8 @@ $(document).ready(function($){
     alert('please check for formatting, spacing, and other bugs')
     flag1 = true
     $('#task1').trigger('click')
-    $("#checktext_ifr").ready(function () {
-      let iframeC = $("#checktext_ifr").contents();
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
       $(iframeC).scrollTop(0)
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -357,11 +357,11 @@ $(document).ready(function($){
     $('#ignoreAll1').hide() 
     alert('found all formatting issues!')
     alert('please check for capitalization issues')
-    //checkCaps(1)
+    checkCaps(1)
     flag2 = true
     $('#task2').trigger('click')
-    $("#checktext_ifr").ready(function () {
-      let iframeC = $("#checktext_ifr").contents();
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
       $(iframeC).scrollTop(0)
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -374,31 +374,31 @@ $(document).ready(function($){
   }
   // checks for Capitalized words
 
-  // function checkCaps(number) {
-  //   $('#checkCap').hide()
-  //   $('#fixSpacing').hide()
-  //   // ignoreAll(number)
-  //   let iframe = document.getElementById("checktext_ifr")
-  //   let innerDoc = iframe.contentDocument
-  //   let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
-  //   bodyText = bodyText.replace(/,/g, ', ')
-  //   bodyText = bodyText.replace(/"/g, '" ')
-  //   bodyText = bodyText.replace(/\?/g, '? ')
-  //   bodyText = bodyText.replace(/--/g, ' ')
-  //   bodyText = bodyText.replace(/\s+(\W)/g, "$1")
-  //   bodyText = bodyText.replace(/\./g, '. ')
-  //   bodyText = bodyText.replace(/\:+[a-z]+/g, ': ')
-  //   bodyText = bodyText.replace(/\;/g, '; ')
-  //   let allCapWords = bodyText.match(/[A-Z]+[a-z]+/g);
-  //   allCapWords = allCapWords.filter(function(elem, pos) {
-  //     return allCapWords.indexOf(elem) === pos;
-  //   });
-  //   //console.log(allCapWords, 'all')
-  //   for (let i = 0; i < allCapWords.length; i++ ) {
-  //     bodyText = bodyText.replace(new RegExp(allCapWords[i], 'g'),`<span class='hiddenSpellError' onkeypress="MORFOLOGIK_RULE_EN_US---#---undefined---#---Possible spelling mistake found---#--- ---#------#---${i}">${allCapWords[i]}</span>`)
-  //   } 
-  //   $(tinymce.get('checktext').getBody()).html( bodyText );
-  // }
+  function checkCaps(number) {
+    $('#checkCap').hide()
+    $('#fixSpacing').hide()
+    // ignoreAll(number)
+    let iframe = document.getElementById(`checktext${number}_ifr`)
+    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
+    let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
+    bodyText = bodyText.replace(/,/g, ', ')
+    bodyText = bodyText.replace(/"/g, '" ')
+    bodyText = bodyText.replace(/\?/g, '? ')
+    bodyText = bodyText.replace(/--/g, ' ')
+    bodyText = bodyText.replace(/\s+(\W)/g, "$1")
+    bodyText = bodyText.replace(/\./g, '. ')
+    bodyText = bodyText.replace(/\:+[a-z]+/g, ': ')
+    bodyText = bodyText.replace(/\;/g, '; ')
+    let allCapWords = bodyText.match(/[A-Z]+[a-z]+/g);
+    allCapWords = allCapWords.filter(function(elem, pos) {
+      return allCapWords.indexOf(elem) === pos;
+    });
+    //console.log(allCapWords, 'all')
+    for (let i = 0; i < allCapWords.length; i++ ) {
+      bodyText = bodyText.replace(new RegExp(allCapWords[i], 'g'),`<span class='hiddenSpellError' onkeypress="MORFOLOGIK_RULE_EN_US---#---undefined---#---Possible spelling mistake found---#--- ---#------#---${allCapWords[i]}">${allCapWords[i]}</span>`)
+    } 
+    $(tinymce.get('checktext1').getBody()).html( bodyText );
+  }
 
   // finish checking for capitalization errors.
 
@@ -410,8 +410,8 @@ $(document).ready(function($){
     flag3 = true
     $('#task3').trigger('click')
     $('#completeLinks').show() 
-    $("#checktext_ifr").ready(function () {
-      let iframeC = $("#checktext_ifr").contents();
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
       $(iframeC).scrollTop(0)
       $(iframeC).scroll(function () { 
         if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
@@ -464,7 +464,7 @@ $(document).ready(function($){
   // ignore all button
 
   function ignoreAll(number){
-    let iframe = document.getElementById("checktext")
+    let iframe = document.getElementById(`checktext${number}_ifr`)
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
     let spellError = innerDoc.getElementsByClassName('hiddenSpellError')
     for (let i = spellError.length; i--; ) {
@@ -479,7 +479,7 @@ $(document).ready(function($){
   // fix spacing
 
   function Spacing(number){   
-    let iframe = document.getElementById("checktext")
+    let iframe = document.getElementById(`checktext${number}_ifr`)
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document
     let bodyText = innerDoc.getElementsByTagName('p')[0].textContent;
     bodyText = bodyText.replace(/,/g, ', ')
@@ -509,9 +509,6 @@ $(document).ready(function($){
   /*body{
   background:#f8f8f8;
   }*/
-  .highlight{
-    background-color:yellow;
-  }
   h1{
   text-align:center;
   padding:50px 0;
@@ -754,7 +751,7 @@ $(document).ready(function($){
     <div style="width:100%;margin:0px auto;border:2px solid #00539D;padding:0px;display:none;" id="step2">
       <h1 style="background:#00539D;color:#fff;padding:5px 7px;margin:0px 0px 7px;">2. Ready to start spellcheck</h1>
       <form id="form2" name="checkform" action="https://community.languagetool.org" method="post" style="margin:20px;">
-        <p id="checktextpara"><textarea id="checktext" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
+        <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
         <input type="submit" id="hidemenot1" name="_action_checkText"
               value="Check Text" onclick="doit();return false;">
         <input type="button" id="checkSpellingErrors" value="Check For Spelling" style="display:none" onclick="checkSpellingError();return false;">
