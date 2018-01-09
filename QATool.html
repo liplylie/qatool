@@ -13,6 +13,7 @@
    mode : "textareas",
    plugins : "AtD,paste",
    selector: "textarea",
+   language_url : '/languages/fi.js',
    paste_text_sticky : true,
    setup : function(ed) {
   	 ed.onInit.add(function(ed) {
@@ -757,6 +758,7 @@ $(document).ready(function($){
         <p id="checktextpara"><textarea id="checktext1" name="text" style="width:100%;height:80%;"> Could not get text from url</textarea></p>
         <input type="submit" id="hidemenot1" name="_action_checkText"
               value="Check Text" onclick="doit();return false;">
+        <input type="hidden" name="lang" id="lang" value="en-US">
         <input type="button" id="checkSpellingErrors" value="Check For Spelling" style="display:none" onclick="checkSpellingError();return false;">
         <input type="button" id="finishSpellGrammar" value="Finish Spell and Grammar Check" style="display:none" onclick="finishSpellGrammarFunction();return false;">
         <input type="button" id="checkGrammar" value="Check Grammar" style="display:none" onclick="checkGrammarFunction();return false;">
@@ -771,7 +773,7 @@ $(document).ready(function($){
         <input id="finishMetaInfo" type="button" value="Finished Meta Info" onclick="finishMetaInfoFunction(); return false;" style="display:none"/>
         <input id="fixSpacing" type="button" value="Fix Spacing" onclick="Spacing(1); return false;" style="display:none"/>
         <input id="ignoreAll1" type="button" value="Ignore All" onclick="ignoreAll(1); return false;" style="display:none"/>
-        <input type="hidden" name="lang" id="lang" value="en-US">
+        
       </form>
     </div>
   </div>
