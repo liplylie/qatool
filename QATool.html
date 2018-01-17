@@ -52,7 +52,7 @@
 	});
 <!-- Fetching post text -->	
 // flags are for checklist logic. need to be on global scope
-  //let grammarErrorHolder
+  let grammarErrorHolder
   //let flag0 = false
   let flag1 = false
   let flag2 = false
@@ -234,6 +234,7 @@ $(document).ready(function($){
   function doit() {
     let langCode = document.checkform.lang.value;
     tinyMCE.activeEditor.execCommand("mceWritingImprovementTool", langCode)
+    checkSpellingError()
     $('#hidemenot1').hide()
     // i frame scroll listener
 
@@ -261,29 +262,30 @@ $(document).ready(function($){
 
   // checks for only spelling errors 
 
-  // function checkSpellingError() {
-  //   $('#checkSpellingErrors').hide()
-  //   $('#ignoreAll1').hide() 
-  //   let iframe = document.getElementById('checktext1_ifr')
-  //   let innerDoc = iframe.contentDocument || iframe.contentWindow.document
-  //   let grammarError = innerDoc.getElementsByClassName('hiddenGrammarError' )
-  //   grammarErrorHolder = Array.from(grammarError).slice()
-  //   for (let i = grammarError.length; i--; ) {
-  //     grammarError[i].classList.remove('hiddenGrammarError');
-  //   } 
+  function checkSpellingError() {
+    $('#checkSpellingErrors').hide()
+    $('#ignoreAll1').hide() 
+    let iframe = document.getElementById('checktext1_ifr')
+    let innerDoc = iframe.contentDocument || iframe.contentWindow.document
+    let grammarError = innerDoc.getElementsByClassName('hiddenGrammarError' )
+    grammarErrorHolder = Array.from(grammarError).slice()
+    console.log(grammarErrorHolder, 'grammarErrorHolder')
+    for (let i = grammarError.length; i--; ) {
+      grammarError[i].classList.remove('hiddenGrammarError');
+    } 
 
-  //   $("#checktext1_ifr").ready(function () {
-  //     let iframeC = $("#checktext1_ifr").contents();
-  //     $(iframeC).scrollTop(0)
-  //     $(iframeC).scroll(function () { 
-  //       if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
-  //         $('#finishSpellingErrors').show()
-  //         $('#ignoreAll1').show() 
-  //         $('#checkSpellingErrors').hide()
-  //       }
-  //     })
-  //   });
-  // }
+    $("#checktext1_ifr").ready(function () {
+      let iframeC = $("#checktext1_ifr").contents();
+      $(iframeC).scrollTop(0)
+      $(iframeC).scroll(function () { 
+        if ( $(iframeC).scrollTop() >= $(iframeC).height() - 600 ) {
+          $('#finishSpellingErrors').show()
+          $('#ignoreAll1').show() 
+          $('#checkSpellingErrors').hide()
+        }
+      })
+    });
+  }
 
   // function finishSpellingError() {
   //   alert('found all spelling errors!')
