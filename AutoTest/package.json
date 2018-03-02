@@ -1,0 +1,16 @@
+{
+  "name": "autotest",
+  "version": "1.0.0",
+  "description": "selenium webdriver test for qa tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./index.js"
+  },
+  "author": "Jordan Daniels",
+  "license": "ISC",
+  "dependencies": {
+    "chromedriver": "^2.35.0",
+    "selenium-webdriver": "^4.0.0-alpha.1"
+  }
+}
