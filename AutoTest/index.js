@@ -1,3 +1,4 @@
+let $ = require("jquery");
 let webdriver = require('selenium-webdriver'),
 By = webdriver.By,
 until = webdriver.until;
@@ -23,16 +24,18 @@ async function runDriver(){
 	  	let start = await driver.get("https://qatool.000webhostapp.com/")
 	  	let enterInput = await driver.findElement(By.xpath('//*[@id="form1"]/input[1]')).sendKeys(testSites[i])
 	  	let submit = await driver.findElement(By.xpath('//*[@id="submit1"]')).click()
-	  	let checkText = await driver.findElement(By.xpath('//*[@id="hidemenot1"]')).click()
+	  	let checkTextWait = await driver.wait(until.elementLocated(By.xpath('//*[@id="hidemenot1"]')), 3000)
+	  	let checkText = driver.findElement(By.xpath('//*[@id="hidemenot1"]')).click()
 	  		.catch(err=>{
+	  			console.log('fail 1')
 	  			let checkText =  setTimeout( ()=> driver.findElement(By.xpath('//*[@id="hidemenot1"]')).click(), 3000 )
 	  		})
 	  	let iframeWait = await driver.wait(until.elementLocated(By.xpath('//*[@id="checktext1_ifr"]')), 5000)
 	  	let iframe = await driver.findElement(By.xpath('//*[@id="checktext1_ifr"]'))
-	  	//let switchFrames = await driver.switchTo().frame(iframe)
-	  	// let scroll = await driver.executeAsyncScript(iframe.scrollTo(200)).then(function (res) {
-	  	// 		console.log('hi')
-				// 	});
+
+	  	let switchFrames = await setTimeout( () =>{driver.switchTo().frame(iframe); console.log('switch')}, 5000)
+	  	let scroll = await driver.executeScript("setTimeout(()=>{var frame_top = $('#checktext1_ifr').contents().find('body').scrollTop(10000);},6000)")
+
   	}
   	catch(error){
   		console.log(error)
