@@ -13,5 +13,8 @@
     "chromedriver": "^2.35.0",
     "jquery": "^3.3.1",
     "selenium-webdriver": "^4.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "prettier": "1.11.1"
   }
 }
