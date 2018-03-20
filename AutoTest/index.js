@@ -33,138 +33,100 @@ async function runDriver() {
 				until.elementLocated(By.xpath('//*[@id="hidemenot1"]')),
 				3000
 			);
-			let checkText = driver
-				.findElement(By.xpath('//*[@id="hidemenot1"]'))
-				.click()
-				.catch(err => {
-					console.log("fail 1");
-					let checkText = setTimeout(
-						() => driver.findElement(By.xpath('//*[@id="hidemenot1"]')).click(),
-						3000
-					);
-				});
+			let checkText = driver.executeScript(
+				"document.getElementById('hidemenot1').click()"
+			);
 
 			let scroll = await driver.executeScript(
-				"setTimeout(()=>{let frame_top = $('#checktext1_ifr').contents().find('body').scrollTop($('#checktext1_ifr').contents().find('body').height());},5000)"
+				"setTimeout(()=>{let frame_top = $('#checktext1_ifr').contents().find('body').scrollTop($('#checktext1_ifr').contents().find('body').height());},3000)"
 			);
-			let finishSpellCheck = await setTimeout(() => {
-				driver.findElement(By.xpath('//*[@id="finishSpellGrammar"]')).click();
-			}, 10000);
-			let clickAlert = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 11000);
-			let clickAlert2 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 11400);
+			let finishSpellCheck = await driver.executeScript(
+				"document.getElementById('finishSpellGrammar').click()"
+			);
+			let clickAlert = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let clickAlert2 = await driver
+				.switchTo()
+				.alert()
+				.accept();
 
-			let scroll2 = await setTimeout(() => {
-				driver.executeScript(
-					"setTimeout(()=>{let frame_top = $('#checktext1_ifr').contents().find('body').scrollTop($('#checktext1_ifr').contents().find('body').height());},1000)"
-				);
-			}, 12000);
-			let finishFormatCheck = await setTimeout(() => {
-				driver.findElement(By.xpath('//*[@id="finishFormat"]')).click();
-			}, 14000);
-			let clickAlert3 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 15000);
-			let clickAlert4 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 15500);
+			let scroll2 = await driver.executeScript(
+				"setTimeout(()=>{let frame_top = $('#checktext1_ifr').contents().find('body').scrollTop($('#checktext1_ifr').contents().find('body').height());},1000)"
+			);
+			let finishFormatCheck = await driver.executeScript(
+				"document.getElementById('finishFormat').click()"
+			);
+			let clickAlert3 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let clickAlert4 = await driver
+				.switchTo()
+				.alert()
+				.accept();
 
-			let scroll3 = await setTimeout(() => {
-				driver.executeScript(
-					"setTimeout(()=>{let frame_top = $('#checktext1_ifr').contents().find('body').scrollTop($('#checktext1_ifr').contents().find('body').height());},1000)"
-				);
-			}, 15900);
-			let finishCapCheck = await setTimeout(() => {
-				driver.findElement(By.xpath('//*[@id="completeCaps"]')).click();
-			}, 17300);
-			let clickAlert5 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 17400);
-			let clickAlert6 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 17700);
+			let scroll3 = await driver.executeScript(
+				"setTimeout(()=>{let frame_top = $('#checktext1_ifr').contents().find('body').scrollTop($('#checktext1_ifr').contents().find('body').height());},1000)"
+			);
+			let finishCapCheck = await driver.executeScript(
+				"document.getElementById('completeCaps').click()"
+			);
 
-			let finishLinkCheck = await setTimeout(() => {
-				driver.findElement(By.xpath('.//*[@id="completeLinks"]')).click();
-			}, 18000);
-			let clickAlert7 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 18300);
-			let clickAlert8 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 18700);
-			let finishMobileCheck = await setTimeout(() => {
-				driver.findElement(By.xpath('.//*[@id="finishMobileCheck"]')).click();
-			}, 19000);
-			let clickAlert9 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 19300);
-			let clickAlert10 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 19700);
-			let finishImageCheck = await setTimeout(() => {
-				driver.findElement(By.xpath('.//*[@id="finishImageText"]')).click();
-			}, 20000);
-			let clickAlert11 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 20300);
-			let clickAlert12 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 20700);
-			let finishMetaCheck = await setTimeout(() => {
-				driver.findElement(By.xpath('.//*[@id="finishMetaInfo"]')).click();
-			}, 21000);
-			let clickAlert13 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 21300);
-			let clickAlert14 = await setTimeout(() => {
-				driver
-					.switchTo()
-					.alert()
-					.accept();
-			}, 21700);
+			let clickAlert5 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let clickAlert6 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+
+			let finishLinkCheck = await driver
+				.findElement(By.xpath('.//*[@id="completeLinks"]'))
+				.click();
+			let clickAlert7 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let clickAlert8 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let finishMobileCheck = await driver
+				.findElement(By.xpath('.//*[@id="finishMobileCheck"]'))
+				.click();
+			let clickAlert9 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let clickAlert10 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let finishImageCheck = await driver
+				.findElement(By.xpath('.//*[@id="finishImageText"]'))
+				.click();
+			let clickAlert11 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let clickAlert12 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let finishMetaCheck = await driver
+				.findElement(By.xpath('.//*[@id="finishMetaInfo"]'))
+				.click();
+			let clickAlert13 = await driver
+				.switchTo()
+				.alert()
+				.accept();
+			let clickAlert14 = await driver
+				.switchTo()
+				.alert()
+				.accept();
 		} catch (error) {
 			console.log(error);
 		}
